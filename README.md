@@ -13,4 +13,7 @@
 UpWave
 ------------
 This repo was forked from https://github.com/lord/slate
-Instructions for how to install and build can be found there and on the wiki pages https://github.com/lord/slate/wiki.
+
+There is nothing secret about this repo - just our documentation for the UpWave API.
+
+To read the docs, visit https://upwavehq.github.io/slate/
