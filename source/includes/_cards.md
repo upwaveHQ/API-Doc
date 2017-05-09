@@ -1,6 +1,7 @@
 # Cards
 
 ## List Cards
+
 `GET https://<TEAM DOMAIN>.upwave.io/api/cards/`
 
 ```shell

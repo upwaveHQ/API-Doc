@@ -26,6 +26,10 @@ cards and boards. It also have some means of updating your data.
 
 As this API is considered extremely early beta, some sections may be tagged with TODO.
 
+If you have any problems or requests please file an issue at github: https://github.com/upwaveHQ/slate
+
+### API Endpoint
+
 Since UpWave confines each team with its own unique subdomain (e.g. mycompany.upwave.io),
 the API endpoint will reflect this by being directly below your team location.
 
@@ -41,7 +45,7 @@ the API endpoint will reflect this by being directly below your team location.
 
 ```shell
 # Authenticate to any API ENDPOINT by adding the Authorization header
-curl "api endpoint"
+curl "<API ENDPOINT>"
   -H 'Authorization: Token <API TOKEN>'
   ```
 > Make sure to replace `<API TOKEN>` with your own.
