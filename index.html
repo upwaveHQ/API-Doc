@@ -234,16 +234,17 @@ cards and boards. It also have some means of updating your data.</p>
 
 <p>As this API is considered extremely early beta, some sections may be tagged with TODO.</p>
 
-<p>If you have any problems or requests please file an issue at github: https://github.com/upwaveHQ/slate</p>
+<p>If you have any problems or requests please file an issue in our <a href="https://github.com/upwaveHQ/API-Doc">UpWave API GitHub repo</a>.</p>
 
 <h3 id="api-endpoint">API Endpoint</h3>
 
 <p>Since UpWave confines each team with its own unique subdomain (e.g. mycompany.upwave.io),
-the API endpoint will reflect this by being directly below your team location.</p>
+the API endpoint will reflect this by being directly below your team location.
+For example if your team domain is <em>myteam</em> the endpoint will be:</p>
 
 <p><code class="prettyprint">API endpoint example: https://myteam.upwave.io/api/</code></p>
 
-<aside class="notice">Remember that your API endpoint rests below <strong>your</strong> team location - referred to as &lt;TEAM DOMAIN&gt; in this document.</aside>
+<aside class="notice">Remember that your API endpoint rests below <strong>your</strong> team domain - referred to as &lt;TEAM DOMAIN&gt; throughout this document.</aside>
 
 <h1 id="authentication">Authentication</h1>
 <pre class="highlight shell tab-shell"><code><span class="c"># Authenticate to any API ENDPOINT by adding the Authorization header</span>
@@ -520,24 +521,40 @@ Also, we have built a triggering system on top of this that you may notice.</p>
 <tr>
 <td>start_dt</td>
 <td>Any</td>
-<td>Will list cards that has due_dt on or after this date</td>
+<td>Filter Cards that has due_dt on or after this date</td>
 </tr>
 <tr>
 <td>end_dt</td>
 <td>Any</td>
-<td>Will list cards that has due_dt on or before this date</td>
+<td>Filter Cards that has due_dt on or before this date</td>
 </tr>
 <tr>
 <td>finished</td>
 <td>false</td>
-<td>When set to true, will only list Cards that are ticket of as completed</td>
+<td>Filter Cards on whether they are completed or not</td>
 </tr>
 <tr>
 <td>state</td>
 <td>Any</td>
-<td>TODO: List cards that has this state (by column state).</td>
+<td>Filter Cards based on their column state</td>
+</tr>
+<tr>
+<td>board</td>
+<td>Any</td>
+<td>Filter cards based on their parent Board</td>
+</tr>
+<tr>
+<td>assigned</td>
+<td>Any</td>
+<td>Filter Cards based on who are assigned</td>
 </tr>
 </tbody></table>
+
+<p>The <code class="prettyprint">assigned</code> parameter supports comma separated list which will be OR&#39;ed.
+For example, to filter Cards that are assigned to either of user-account 1 or 2 you can pass in:
+<code class="prettyprint">?assigned=1,2</code></p>
+
+<p>Date arguments <code class="prettyprint">start_dt</code> and <code class="prettyprint">end_dt</code> are given on the format <code class="prettyprint">YYYY-MM-DD</code>.</p>
 
 <h2 id="get-a-specific-card">Get a Specific Card</h2>
 
@@ -610,6 +627,65 @@ Also, we have built a triggering system on top of this that you may notice.</p>
     </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span></code></pre>
+          <h2 id="updating-a-card">Updating a Card</h2>
+
+<p><code class="prettyprint">PATCH https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/&lt;ID&gt;/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Updates Card 4723</span>
+curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/
+  -H <span class="s1">'Authorization: Token &lt;API_TOKEN&gt;'</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -X POST
+  -d <span class="s1">'{"description": "My new description", "due_dt": "2017-05-10T09:38:06.459119"}'</span>
+</code></pre>
+<table><thead>
+<tr>
+<th>Allowed field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>description</td>
+<td><code class="prettyprint">string</code></td>
+<td>plain-text or HTML allowed</td>
+</tr>
+<tr>
+<td>due_dt</td>
+<td><code class="prettyprint">datetime-iso</code></td>
+<td>updates the cards due-dt. Pass <em>null</em> to remove due-dt</td>
+</tr>
+<tr>
+<td>color</td>
+<td><code class="prettyprint">color-id</code></td>
+<td>updates the color for this card. Pass <em>null</em> to remove color</td>
+</tr>
+<tr>
+<td>archive</td>
+<td><code class="prettyprint">boolean</code></td>
+<td>if true the card will be moved to the archive</td>
+</tr>
+<tr>
+<td>finished</td>
+<td><code class="prettyprint">boolean</code></td>
+<td>toggle the completed state of a card</td>
+</tr>
+<tr>
+<td>assigned</td>
+<td><code class="prettyprint">id-list</code></td>
+<td>will assign this card to those user accounts</td>
+</tr>
+<tr>
+<td>sort_before</td>
+<td><code class="prettyprint">mixed</code></td>
+<td>sorts this card before given card id. (0 will sort last)</td>
+</tr>
+</tbody></table>
+
+<p>To update a card you patch in a JSON object with the fields you&rsquo;d like to update.
+For date fields, use UTC.</p>
+
+<aside class="notice">The <strong>title</strong> attribute of a Card cannot be set as it is automatically based on the description fields first line.</aside>
+
           <h2 id="creating-a-new-card">Creating a new Card</h2>
 
 <p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/</code></p>
@@ -653,8 +729,6 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/
 </tbody></table>
 
 <p><code class="prettyprint">* required field</code></p>
-
-<aside class="notice">The <strong>title</strong> attribute of a Card cannot be set as it is automatically based on the description fields first line.</aside>
 
           <h1 id="errors">Errors</h1>
 
