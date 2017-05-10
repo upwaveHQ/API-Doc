@@ -60,10 +60,18 @@ This endpoint retrieves all the Cards you can access in a paginated fashion.
 
 Parameter | Default | Description
 --------- | ------- | -----------
-start_dt | Any | Will list cards that has due_dt on or after this date
-end_dt | Any | Will list cards that has due_dt on or before this date
-finished | false | When set to true, will only list Cards that are ticket of as completed
-state | Any | TODO: List cards that has this state (by column state).
+start_dt | Any | Filter Cards that has due_dt on or after this date
+end_dt | Any | Filter Cards that has due_dt on or before this date
+finished | false | Filter Cards on whether they are completed or not
+state | Any | Filter Cards based on their column state
+board | Any | Filter cards based on their parent Board
+assigned | Any | Filter Cards based on who are assigned
+
+The `assigned` parameter supports comma separated list which will be OR'ed.
+For example, to filter Cards that are assigned to either of user-account 1 or 2 you can pass in:
+`?assigned=1,2`
+
+Date arguments `start_dt` and `end_dt` are given on the format `YYYY-MM-DD`.
 
 ## Get a Specific Card
 `GET https://<TEAM DOMAIN>.upwave.io/api/cards/<ID>`

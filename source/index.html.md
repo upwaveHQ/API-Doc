@@ -10,6 +10,7 @@ toc_footers:
 includes:
   - boards
   - cards
+  - updatecard
   - createcard
   - errors
   
@@ -26,16 +27,18 @@ cards and boards. It also have some means of updating your data.
 
 As this API is considered extremely early beta, some sections may be tagged with TODO.
 
-If you have any problems or requests please file an issue at github: https://github.com/upwaveHQ/slate
+If you have any problems or requests please file an issue in our [UpWave API GitHub repo](https://github.com/upwaveHQ/API-Doc).
+
 
 ### API Endpoint
 
 Since UpWave confines each team with its own unique subdomain (e.g. mycompany.upwave.io),
 the API endpoint will reflect this by being directly below your team location.
+For example if your team domain is *myteam* the endpoint will be:
 
 `API endpoint example: https://myteam.upwave.io/api/`
 
-<aside class="notice">Remember that your API endpoint rests below <strong>your</strong> team location - referred to as &lt;TEAM DOMAIN&gt; in this document.</aside>
+<aside class="notice">Remember that your API endpoint rests below <strong>your</strong> team domain - referred to as &lt;TEAM DOMAIN&gt; throughout this document.</aside>
 
 
 

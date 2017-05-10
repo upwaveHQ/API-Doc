@@ -23,4 +23,3 @@ row | Will position the card in this Row (defaults to first Row)
 
 `* required field`
 
-<aside class="notice">The <strong>title</strong> attribute of a Card cannot be set as it is automatically based on the description fields first line.</aside>
