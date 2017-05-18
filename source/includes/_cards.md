@@ -58,14 +58,14 @@ This endpoint retrieves all the Cards you can access in a paginated fashion.
 
 ### Query Parameters
 
-Parameter | Default | Description
---------- | ------- | -----------
-start_dt | Any | Filter Cards that has due_dt on or after this date
-end_dt | Any | Filter Cards that has due_dt on or before this date
-finished | false | Filter Cards on whether they are completed or not
-state | Any | Filter Cards based on their column state
-board | Any | Filter cards based on their parent Board
-assigned | Any | Filter Cards based on who are assigned
+Parameter | Format | Description
+--------- | ------- | ---- | -----------
+start_dt | `YYYY-MM-DD` | Filter Cards that has due_dt on or after this date
+end_dt | `YYYY-MM-DD` | Filter Cards that has due_dt on or before this date
+finished | `true/false` | Filter Cards on whether they are completed or not
+state | `integer` | Filter Cards based on their column state
+board | `integer` | Filter Cards based on their parent Board
+assigned | `1,2,3` | Filter Cards based on who are assigned
 
 The `assigned` parameter supports comma separated list which will be OR'ed.
 For example, to filter Cards that are assigned to either of user-account 1 or 2 you can pass in:

@@ -15,13 +15,13 @@ Allowed field | Type | Description
 -------- | ----------- | --------------
 description | `string` | plain-text or HTML allowed
 due_dt | `datetime-iso` | updates the cards due-dt. Pass *null* to remove due-dt
-color | `color-id` | updates the color for this card. Pass *null* to remove color
-archive | `boolean` | if true the card will be moved to the archive
-finished | `boolean` | toggle the completed state of a card
-assigned | `id-list` | will assign this card to those user accounts
-sort_before | `mixed` | sorts this card before given card id. (0 will sort last)
+color | `color-id` | updates the color for this Card. Pass *null* to remove color
+archive | `boolean` | if true the Card will be moved to the archive
+finished | `boolean` | toggle the completed state of a Card
+assigned | `id-list` | will assign this Card to those user accounts
+sort_before | `integer` | sorts this Card before given Card id. (0 will sort last)
 
-To update a card you patch in a JSON object with the fields you'd like to update.
+To update a Card you patch in a JSON object with the fields you'd like to update.
 For date fields, use UTC.
 
 <aside class="notice">The <strong>title</strong> attribute of a Card cannot be set as it is automatically based on the description fields first line.</aside>

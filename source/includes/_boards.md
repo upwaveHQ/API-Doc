@@ -28,24 +28,6 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/boards/"
           "firstname": "John",
           "avatar": "https://my.profile.image"
         },
-        "colors": [
-          {
-            "name": "Red",
-            "id": 1,
-            "hex_color": "#f37477"
-          },
-          {
-            "name": "Yellow",
-            "id": 2,
-            "hex_color": "#fed562"
-          },
-          {
-            "name": "Green",
-            "id": 3,
-            "hex_color": "#aed581"
-          }
-        ]
-      },
       {
         "id": 2,
         ..
@@ -60,7 +42,7 @@ This endpoint retrieves all the Boards you can access in a paginated fashion.
 
 Parameter | Default | Description
 --------- | ------- | -----------
-include_columns | 0 | If set to 1, the result will also include columns and rows for each board.
+include_columns | `false` | If set to `true`, the result will also include columns for each board.
 
 
 ## Get a Specific Board
@@ -130,6 +112,12 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/boards/1"
 ```
 
 This endpoint retrieves a specific Board.
+
+### Query Parameters
+
+Parameter | Default | Description
+--------- | ------- | -----------
+include_members | `false` | If set to `true`, the result will also include members on the board.
 
 ## Note on Board structure
 

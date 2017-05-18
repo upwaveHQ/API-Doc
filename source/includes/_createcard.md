@@ -11,6 +11,8 @@ curl https://<TEAM DOMAIN>.upwave.io/api/cards/
   -d '{"description": "A new card", "board": 311}'
 ```
 
+The new Card will be sorted last automatically (use update to change it).
+
 Argument | Description
 -------- | -----------
 description* | The content of the Card. May be HTML formatted

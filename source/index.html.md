@@ -12,6 +12,7 @@ includes:
   - cards
   - updatecard
   - createcard
+  - tasklistitems
   - errors
   
 
@@ -27,7 +28,7 @@ cards and boards. It also have some means of updating your data.
 
 As this API is considered extremely early beta, some sections may be tagged with TODO.
 
-If you have any problems or requests please file an issue in our [UpWave API GitHub repo](https://github.com/upwaveHQ/API-Doc).
+If you have any problems or requests please file an issue in our [UpWave API GitHub repo](https://github.com/upwaveHQ/api).
 
 
 ### API Endpoint
