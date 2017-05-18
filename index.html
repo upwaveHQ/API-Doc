@@ -234,7 +234,7 @@ cards and boards. It also have some means of updating your data.</p>
 
 <p>As this API is considered extremely early beta, some sections may be tagged with TODO.</p>
 
-<p>If you have any problems or requests please file an issue in our <a href="https://github.com/upwaveHQ/API-Doc">UpWave API GitHub repo</a>.</p>
+<p>If you have any problems or requests please file an issue in our <a href="https://github.com/upwaveHQ/api">UpWave API GitHub repo</a>.</p>
 
 <h3 id="api-endpoint">API Endpoint</h3>
 
@@ -296,24 +296,6 @@ Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages.
           </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
           </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="s2">"colors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Red"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#f37477"</span><span class="w">
-          </span><span class="p">},</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Yellow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#fed562"</span><span class="w">
-          </span><span class="p">},</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Green"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#aed581"</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">},</span><span class="w">
       </span><span class="p">{</span><span class="w">
         </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
         </span><span class="err">..</span><span class="w">
@@ -334,8 +316,8 @@ Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages.
 </thead><tbody>
 <tr>
 <td>include_columns</td>
-<td>0</td>
-<td>If set to 1, the result will also include columns and rows for each board.</td>
+<td><code class="prettyprint">false</code></td>
+<td>If set to <code class="prettyprint">true</code>, the result will also include columns for each board.</td>
 </tr>
 </tbody></table>
 
@@ -403,6 +385,22 @@ Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages.
   </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint retrieves a specific Board.</p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>include_members</td>
+<td><code class="prettyprint">false</code></td>
+<td>If set to <code class="prettyprint">true</code>, the result will also include members on the board.</td>
+</tr>
+</tbody></table>
 
 <h2 id="note-on-board-structure">Note on Board structure</h2>
 
@@ -514,38 +512,38 @@ Also, we have built a triggering system on top of this that you may notice.</p>
 <table><thead>
 <tr>
 <th>Parameter</th>
-<th>Default</th>
+<th>Format</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>start_dt</td>
-<td>Any</td>
+<td><code class="prettyprint">YYYY-MM-DD</code></td>
 <td>Filter Cards that has due_dt on or after this date</td>
 </tr>
 <tr>
 <td>end_dt</td>
-<td>Any</td>
+<td><code class="prettyprint">YYYY-MM-DD</code></td>
 <td>Filter Cards that has due_dt on or before this date</td>
 </tr>
 <tr>
 <td>finished</td>
-<td>false</td>
+<td><code class="prettyprint">true/false</code></td>
 <td>Filter Cards on whether they are completed or not</td>
 </tr>
 <tr>
 <td>state</td>
-<td>Any</td>
+<td><code class="prettyprint">integer</code></td>
 <td>Filter Cards based on their column state</td>
 </tr>
 <tr>
 <td>board</td>
-<td>Any</td>
-<td>Filter cards based on their parent Board</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Filter Cards based on their parent Board</td>
 </tr>
 <tr>
 <td>assigned</td>
-<td>Any</td>
+<td><code class="prettyprint">1,2,3</code></td>
 <td>Filter Cards based on who are assigned</td>
 </tr>
 </tbody></table>
@@ -657,31 +655,31 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/
 <tr>
 <td>color</td>
 <td><code class="prettyprint">color-id</code></td>
-<td>updates the color for this card. Pass <em>null</em> to remove color</td>
+<td>updates the color for this Card. Pass <em>null</em> to remove color</td>
 </tr>
 <tr>
 <td>archive</td>
 <td><code class="prettyprint">boolean</code></td>
-<td>if true the card will be moved to the archive</td>
+<td>if true the Card will be moved to the archive</td>
 </tr>
 <tr>
 <td>finished</td>
 <td><code class="prettyprint">boolean</code></td>
-<td>toggle the completed state of a card</td>
+<td>toggle the completed state of a Card</td>
 </tr>
 <tr>
 <td>assigned</td>
 <td><code class="prettyprint">id-list</code></td>
-<td>will assign this card to those user accounts</td>
+<td>will assign this Card to those user accounts</td>
 </tr>
 <tr>
 <td>sort_before</td>
-<td><code class="prettyprint">mixed</code></td>
-<td>sorts this card before given card id. (0 will sort last)</td>
+<td><code class="prettyprint">integer</code></td>
+<td>sorts this Card before given Card id. (0 will sort last)</td>
 </tr>
 </tbody></table>
 
-<p>To update a card you patch in a JSON object with the fields you&rsquo;d like to update.
+<p>To update a Card you patch in a JSON object with the fields you&rsquo;d like to update.
 For date fields, use UTC.</p>
 
 <aside class="notice">The <strong>title</strong> attribute of a Card cannot be set as it is automatically based on the description fields first line.</aside>
@@ -696,6 +694,8 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/
   -X POST
   -d <span class="s1">'{"description": "A new card", "board": 311}'</span>
 </code></pre>
+<p>The new Card will be sorted last automatically (use update to change it).</p>
+
 <table><thead>
 <tr>
 <th>Argument</th>
@@ -729,6 +729,128 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/
 </tbody></table>
 
 <p><code class="prettyprint">* required field</code></p>
+
+          <h1 id="tasklistitems">TaskListItems</h1>
+
+<h2 id="list-tasklistitems">List TaskListItems</h2>
+
+<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/"</span>
+  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Write API documentation for TaskListItem"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"sort_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Write tests for TaskListItem API"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-05-18T11:53:41.402858Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"sort_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves all the TaskListItems you can access in a paginated fashion.</p>
+
+<p>A TaskListItem is essentially a subtask and consist of a description, a field determining if its finished or not, and a sort index.</p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>finished</td>
+<td><code class="prettyprint">true/false</code></td>
+<td>Filter TaskListItems on whether they are completed or not</td>
+</tr>
+<tr>
+<td>card</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Filter TaskListItems based on their parent Card</td>
+</tr>
+</tbody></table>
+
+<h2 id="creating-a-new-tasklistitem">Creating a new TaskListItem</h2>
+
+<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Creates a new TaskListItem on Card 2</span>
+curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/
+  -H <span class="s1">'Authorization: Token &lt;API_TOKEN&gt;'</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -X POST
+  -d <span class="s1">'{"description": "Write tests for Cmment API", "card": 2}'</span>
+</code></pre>
+<p>The new TaskListItem will be sorted last automatically (use update to change it).</p>
+
+<table><thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>description*</td>
+<td>The description of the TaskListItem</td>
+</tr>
+<tr>
+<td>card*</td>
+<td>The parent Card</td>
+</tr>
+</tbody></table>
+
+<p><code class="prettyprint">* required field</code></p>
+
+<h2 id="updating-a-tasklistitem">Updating a TaskListItem</h2>
+
+<p><code class="prettyprint">PATCH https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/&lt;ID&gt;/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Updates TaskListItem 13</span>
+curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/13/
+  -H <span class="s1">'Authorization: Token &lt;API_TOKEN&gt;'</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -X POST
+  -d <span class="s1">'{"description": "Write tests for Comment API", "finished_dt": "2017-05-10T09:38:06.459119", "sort_before": "12"}'</span>
+</code></pre>
+<table><thead>
+<tr>
+<th>Allowed field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>description</td>
+<td><code class="prettyprint">string</code></td>
+<td>plain-text</td>
+</tr>
+<tr>
+<td>finished</td>
+<td><code class="prettyprint">boolean</code></td>
+<td>toggle the completed state of a TaskListItem</td>
+</tr>
+<tr>
+<td>sort_before</td>
+<td><code class="prettyprint">integer</code></td>
+<td>sorts this TaskListItem before given TaskListItem id. (0 will sort last)</td>
+</tr>
+</tbody></table>
 
           <h1 id="errors">Errors</h1>
 
