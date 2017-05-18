@@ -4,3 +4,4 @@
 
 `GET https://<TEAM DOMAIN>.upwave.io/api/comments/`
 
+TEST
