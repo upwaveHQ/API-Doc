@@ -55,11 +55,13 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/cards/"
 ```
 
 This endpoint retrieves all the Cards you can access in a paginated fashion.
+They are ordered by creation date (created_dt) with the newest Card listed first.
 
 ### Query Parameters
 
 Parameter | Format | Description
 --------- | ------- | ---- | -----------
+created_by_user | `integer` | Filter Cards on what user created them
 start_dt | `YYYY-MM-DD` | Filter Cards that has due_dt on or after this date
 end_dt | `YYYY-MM-DD` | Filter Cards that has due_dt on or before this date
 finished | `true/false` | Filter Cards on whether they are completed or not

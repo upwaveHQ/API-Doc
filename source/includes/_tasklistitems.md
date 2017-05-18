@@ -36,6 +36,7 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/"
 ```
 
 This endpoint retrieves all the TaskListItems you can access in a paginated fashion.
+They are ordered by sort_index which really only makes sense when filtering using the Card parameter.
 
 A TaskListItem is essentially a subtask and consist of a description, a field determining if its finished or not, and a sort index.
 

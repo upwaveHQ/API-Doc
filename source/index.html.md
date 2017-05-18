@@ -13,6 +13,8 @@ includes:
   - updatecard
   - createcard
   - tasklistitems
+  - comments
+  - attachments
   - errors
   
 

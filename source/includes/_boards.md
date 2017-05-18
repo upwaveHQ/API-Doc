@@ -26,7 +26,10 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/boards/"
           "email": "person@example.com",
           "fullname": "John Doe",
           "firstname": "John",
-          "avatar": "https://my.profile.image"
+          "avatar": "https://my.profile.image",
+          "timezone": "UTC",
+          "language_code": "en",
+          "first_day": 1
         },
       {
         "id": 2,
@@ -37,6 +40,7 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/boards/"
 ```
 
 This endpoint retrieves all the Boards you can access in a paginated fashion.
+They are ordered by creation date (created_dt) with the newest Board listed first.
 
 ### Query Parameters
 
