@@ -76,7 +76,10 @@ For example, to filter Cards that are assigned to either of user-account 1 or 2 
 Date arguments `start_dt` and `end_dt` are given on the format `YYYY-MM-DD`.
 
 ## Get a Specific Card
+
 `GET https://<TEAM DOMAIN>.upwave.io/api/cards/<ID>`
+
+This endpoint retrieves a specific Card.
 
 ```shell
 curl "https://<TEAM DOMAIN>.upwave.io/api/cards/4723"

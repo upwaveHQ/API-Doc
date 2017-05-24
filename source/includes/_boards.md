@@ -27,9 +27,6 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/boards/"
           "fullname": "John Doe",
           "firstname": "John",
           "avatar": "https://my.profile.image",
-          "timezone": "UTC",
-          "language_code": "en",
-          "first_day": 1
         },
       {
         "id": 2,
