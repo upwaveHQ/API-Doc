@@ -270,6 +270,8 @@ Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages.
 
           <h1 id="boards">Boards</h1>
 
+<p>An UpWave Board is a surface where Cards live. The Board consist of columns, rows and colors which together forms the structure of the Board.</p>
+
 <h2 id="list-boards">List Boards</h2>
 
 <p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/</code></p>
@@ -324,8 +326,8 @@ They are ordered by creation date (created_dt) with the newest Board listed firs
 
 <h2 id="get-a-specific-board">Get a Specific Board</h2>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/&lt;ID&gt;</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/1"</span>
+<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/&lt;ID&gt;/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/1/"</span>
   -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
 </code></pre>
 <blockquote>
@@ -456,13 +458,19 @@ Also, we have built a triggering system on top of this that you may notice.</p>
 
 <h2 id="updating-a-board">Updating a Board</h2>
 
+<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/&lt;ID&gt;/</code></p>
+
 <p>TODO</p>
 
 <h2 id="creating-a-new-board">Creating a new Board</h2>
 
+<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/</code></p>
+
 <p>TODO</p>
 
 <h2 id="deleting-a-board">Deleting a Board</h2>
+
+<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/&lt;ID&gt;/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Deletes Board with id 1</span>
 curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/1/"</span>
   -X DELETE
@@ -471,6 +479,8 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/1/"</spa
 <p>Right? Yes, look right to see how to delete a Board.</p>
 
           <h1 id="cards">Cards</h1>
+
+<p>UpWave Cards is an information carrier that holds task-description, comments, files etc.</p>
 
 <h2 id="list-cards">List Cards</h2>
 
@@ -579,10 +589,10 @@ For example, to filter Cards that are assigned to either of user-account 1 or 2 
 
 <h2 id="get-a-specific-card">Get a Specific Card</h2>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/&lt;ID&gt;</code></p>
+<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/&lt;ID&gt;/</code></p>
 
 <p>This endpoint retrieves a specific Card.</p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723"</span>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/"</span>
   -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
 </code></pre>
 <blockquote>
@@ -756,6 +766,8 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/
 <p><code class="prettyprint">* required field</code></p>
 
 <h2 id="deleting-a-card">Deleting a Card</h2>
+
+<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/&lt;ID&gt;/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Deletes Card with id 4723</span>
 curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/"</span>
   -X DELETE
@@ -764,6 +776,8 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/"</s
 <p>Tilt your head right and see how.</p>
 
           <h1 id="tasklistitems">TaskListItems</h1>
+
+<p>TaskListItems is UpWaves way of handling sub-tasks.</p>
 
 <h2 id="list-tasklistitems">List TaskListItems</h2>
 
@@ -887,6 +901,8 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/13/
 </tbody></table>
 
 <h2 id="deleting-a-tasklistitem">Deleting a TaskListItem</h2>
+
+<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/&lt;ID&gt;/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Deletes TaskListItem with id 12</span>
 curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/12/"</span>
   -X DELETE
@@ -896,12 +912,12 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/1
 
           <h1 id="comments">Comments</h1>
 
-<p><code class="prettyprint">API endpoint: https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/</code></p>
-
 <p>Comments are posted onto Cards by users.
 A Comment holds a text message and optionally a list of <a href="#attachments">Attachments</a>.</p>
 
 <h2 id="list-comments">List Comments</h2>
+
+<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/</code></p>
 <pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/"</span>
   -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
 </code></pre>
@@ -970,8 +986,10 @@ They are ordered by creation date (created_dt) with the newest Comment listed fi
 
 <h2 id="get-a-specific-comment">Get a specific Comment</h2>
 
+<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/&lt;ID&gt;/</code></p>
+
 <p>Identical to a Comment in the list-format above.</p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/1"</span>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/1/"</span>
   -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
 </code></pre>
 <blockquote>
@@ -1007,7 +1025,9 @@ They are ordered by creation date (created_dt) with the newest Comment listed fi
   </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <h2 id="updating-a-comment">Updating a Comment</h2>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10"</span>
+
+<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/&lt;ID&gt;/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</span>
   -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
   -X POST
   -d <span class="s1">'{
@@ -1031,6 +1051,8 @@ They are ordered by creation date (created_dt) with the newest Comment listed fi
 <aside class="notice">Deleting an attachment in a comment can only be done through the Attachment API</aside>
 
 <h2 id="creating-a-new-comment">Creating a new Comment</h2>
+
+<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/</code></p>
 
 <p>Create new Comments by passing in a text and which Card it should be posted to.
 A Comment may also carry Attachments.</p>
@@ -1085,6 +1107,8 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/"</spa
 <p><code class="prettyprint">* required field</code></p>
 
 <h2 id="deleting-a-comment">Deleting a Comment</h2>
+
+<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/&lt;ID&gt;/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Deletes Comment with id 10</span>
 curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</span>
   -X DELETE
@@ -1093,6 +1117,8 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</
 <p>If you just direct your eyes slightly to the right, you will see how to delete a Comment</p>
 
           <h1 id="attachments">Attachments</h1>
+
+<p>Attachments may accompany a Comment and holds a resource link to either an uploaded file, a web resource or a Google Drive file.</p>
 
 <h2 id="list-attachments">List Attachments</h2>
 
@@ -1114,35 +1140,35 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</
         </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
         </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sketch.png"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uploadedfile"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ninja-dev-uploads.s3.amazonaws.com/asd/BVCKxWmCTcevo7mBy1nB_avatar_nisse.gif"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ninja-dev-uploads.s3.amazonaws.com/asd/md1WViRniVqCZWO8NLpQ_preview_avatar_nisse.gif"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://ninja-dev-uploads.s3.amazonaws.com/asd/yNnwS9nvSgepQvbjJFV4_cover_avatar_nisse.gif"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">5733</span><span class="p">,</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Spreadsheet X"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gdrive"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://drive.google.com/............."</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mysite"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"link"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mysite.com"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some.image.url,
+        "</span><span class="err">preview_url</span><span class="s2">": "</span><span class="err">some.image.url</span><span class="s2">",
+        "</span><span class="err">cover_url</span><span class="s2">": "</span><span class="err">some.image.url</span><span class="s2">",
+        "</span><span class="err">file_size</span><span class="s2">": 5733,
+      },
+      {
+        "</span><span class="err">id</span><span class="s2">": 2,
+        "</span><span class="err">comment</span><span class="s2">": 6,
+        "</span><span class="err">card</span><span class="s2">": 5,
+        "</span><span class="err">name</span><span class="s2">": "</span><span class="err">Spreadsheet</span><span class="w"> </span><span class="err">X</span><span class="s2">",
+        "</span><span class="err">source</span><span class="s2">": "</span><span class="err">gdrive</span><span class="s2">",
+        "</span><span class="err">url</span><span class="s2">": "</span><span class="err">https</span><span class="p">:</span><span class="err">//drive.google.com/.............</span><span class="s2">",
+        "</span><span class="err">preview_url</span><span class="s2">": null,
+        "</span><span class="err">cover_url</span><span class="s2">": null,
+        "</span><span class="err">file_size</span><span class="s2">": 0,
+      },
+      {
+        "</span><span class="err">id</span><span class="s2">": 3,
+        "</span><span class="err">comment</span><span class="s2">": 7,
+        "</span><span class="err">card</span><span class="s2">": 6,
+        "</span><span class="err">name</span><span class="s2">": "</span><span class="err">mysite</span><span class="s2">",
+        "</span><span class="err">source</span><span class="s2">": "</span><span class="err">link</span><span class="s2">",
+        "</span><span class="err">url</span><span class="s2">": "</span><span class="err">https</span><span class="p">:</span><span class="err">//mysite.com</span><span class="s2">",
+        "</span><span class="err">preview_url</span><span class="s2">": null,
+        "</span><span class="err">cover_url</span><span class="s2">": null,
+        "</span><span class="err">file_size</span><span class="s2">": 0,
+      }
+    ]
+  }
 </span></code></pre>
 <p>Filtering options:</p>
 
@@ -1177,6 +1203,8 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</
 <aside class="warning">Attachments can only be created using the Comment api</aside>
 
 <h2 id="deleting-an-attachment">Deleting an Attachment</h2>
+
+<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/attachments/&lt;ID&gt;/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Deletes attachment with id 3</span>
 curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/attachments/3/"</span>
   -X DELETE
