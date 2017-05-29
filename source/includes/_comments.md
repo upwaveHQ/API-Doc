@@ -166,3 +166,13 @@ text | The content of the Comment in plain text format
 attachments | A list of Attachments
 
 `* required field`
+
+## Deleting a Comment
+
+```shell
+# Deletes Comment with id 10
+curl "https://<TEAM DOMAIN>.upwave.io/api/comments/10/"
+  -X DELETE
+  -H "Authorization: <API TOKEN>"
+```
+If you just direct your eyes slightly to the right, you will see how to delete a Comment

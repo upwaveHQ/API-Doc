@@ -149,3 +149,22 @@ Currently there are two triggers in effect on all Boards.
 - When a card is dragged to a Column with state 3, the card will automatically be ticked off as completed.
 
 <aside class="notice">User actions may on rare occasions trigger update events.</aside>
+
+## Updating a Board
+
+TODO
+
+## Creating a new Board
+
+TODO
+
+## Deleting a Board
+
+```shell
+# Deletes Board with id 1
+curl "https://<TEAM DOMAIN>.upwave.io/api/boards/1/"
+  -X DELETE
+  -H "Authorization: <API TOKEN>"
+```
+
+Right? Yes, look right to see how to delete a Board.

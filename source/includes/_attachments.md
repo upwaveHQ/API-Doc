@@ -64,13 +64,18 @@ source | `string` | Filter Attachments on source (see below)
 
 `"source" may be either of "uploadedfile", "link" or "gdrive"`
 
-<aside class="notice">The "source" attribute of an Attachment is used to separate types of Attachments. Attachment sources other than "uploadedfile", may be unsecure and will take the user outside of UpWave when link is followed.</aside>
-
 File sizes will only be listed for files that are either uploaded directly (source is "uploadedfile") or for Google Drive files that has a file size.
 
-<aside class="warning">TODO: Attachments can only be created using Comment api</aside>
+<aside class="warning">Attachments can only be created using the Comment api</aside>
 
-## Delete Attachments
+## Deleting an Attachment
 
-Although you will have to create Attachments using the Comment API, deletion of attachments can be done through Attachment API.
+```shell
+# Deletes attachment with id 3
+curl "https://<TEAM DOMAIN>.upwave.io/api/attachments/3/"
+  -X DELETE
+  -H "Authorization: <API TOKEN>"
+```
+
+Although you will have to create Attachments using the Comment API, deletion of attachments can be done using the Attachment API.
 When deleting an Attachment, the comment will be set as edited by you.

@@ -87,3 +87,14 @@ Allowed field | Type | Description
 description | `string` | plain-text
 finished | `boolean` | toggle the completed state of a TaskListItem
 sort_before | `integer` | sorts this TaskListItem before given TaskListItem id. (0 will sort last)
+
+## Deleting a TaskListItem
+
+```shell
+# Deletes TaskListItem with id 12
+curl "https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/12/"
+  -X DELETE
+  -H "Authorization: <API TOKEN>"
+```
+
+Look there ------>

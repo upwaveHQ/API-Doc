@@ -25,3 +25,13 @@ row | Will position the card in this Row (defaults to first Row)
 
 `* required field`
 
+## Deleting a Card
+
+```shell
+# Deletes Card with id 4723
+curl "https://<TEAM DOMAIN>.upwave.io/api/cards/4723/"
+  -X DELETE
+  -H "Authorization: <API TOKEN>"
+```
+
+Tilt your head right and see how.
