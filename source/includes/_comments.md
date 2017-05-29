@@ -1,11 +1,10 @@
 # Comments
 
-`API endpoint: https://<TEAM DOMAIN>.upwave.io/api/comments/`
-
 Comments are posted onto Cards by users.
 A Comment holds a text message and optionally a list of [Attachments](#attachments).
 
 ## List Comments
+`GET https://<TEAM DOMAIN>.upwave.io/api/comments/`
 
 ```shell
 curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
@@ -63,11 +62,12 @@ created_by_user | `integer` | Filter Comments on what user created them
 card | `integer` | Filter Comments based on their parent Card
 
 ## Get a specific Comment
+`GET https://<TEAM DOMAIN>.upwave.io/api/comments/<ID>/`
 
 Identical to a Comment in the list-format above.
 
 ```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/comments/1"
+curl "https://<TEAM DOMAIN>.upwave.io/api/comments/1/"
   -H "Authorization: <API TOKEN>"
 ```
 
@@ -105,9 +105,10 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/comments/1"
 ```
 
 ## Updating a Comment
+`POST https://<TEAM DOMAIN>.upwave.io/api/comments/<ID>/`
 
 ```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/comments/10"
+curl "https://<TEAM DOMAIN>.upwave.io/api/comments/10/"
   -H "Authorization: <API TOKEN>"
   -X POST
   -d '{
@@ -125,6 +126,7 @@ text | The content of the Comment in plain text format
 
 
 ## Creating a new Comment
+`POST https://<TEAM DOMAIN>.upwave.io/api/comments/`
 
 Create new Comments by passing in a text and which Card it should be posted to.
 A Comment may also carry Attachments.
@@ -168,6 +170,7 @@ attachments | A list of Attachments
 `* required field`
 
 ## Deleting a Comment
+`DELETE https://<TEAM DOMAIN>.upwave.io/api/comments/<ID>/`
 
 ```shell
 # Deletes Comment with id 10

@@ -1,5 +1,7 @@
 # Cards
 
+UpWave Cards is an information carrier that holds task-description, comments, files etc.
+
 ## List Cards
 
 `GET https://<TEAM DOMAIN>.upwave.io/api/cards/`
@@ -77,12 +79,12 @@ Date arguments `start_dt` and `end_dt` are given on the format `YYYY-MM-DD`.
 
 ## Get a Specific Card
 
-`GET https://<TEAM DOMAIN>.upwave.io/api/cards/<ID>`
+`GET https://<TEAM DOMAIN>.upwave.io/api/cards/<ID>/`
 
 This endpoint retrieves a specific Card.
 
 ```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/cards/4723"
+curl "https://<TEAM DOMAIN>.upwave.io/api/cards/4723/"
   -H "Authorization: <API TOKEN>"
 ```
 

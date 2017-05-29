@@ -1,5 +1,7 @@
 # TaskListItems
 
+TaskListItems is UpWaves way of handling sub-tasks.
+
 ## List TaskListItems
 
 `GET https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/`
@@ -89,6 +91,7 @@ finished | `boolean` | toggle the completed state of a TaskListItem
 sort_before | `integer` | sorts this TaskListItem before given TaskListItem id. (0 will sort last)
 
 ## Deleting a TaskListItem
+`DELETE https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/<ID>/`
 
 ```shell
 # Deletes TaskListItem with id 12

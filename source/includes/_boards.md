@@ -1,5 +1,7 @@
 # Boards
 
+An UpWave Board is a surface where Cards live. The Board consist of columns, rows and colors which together forms the structure of the Board.
+
 ## List Boards
 `GET https://<TEAM DOMAIN>.upwave.io/api/boards/`
 
@@ -47,10 +49,10 @@ include_columns | `false` | If set to `true`, the result will also include colum
 
 
 ## Get a Specific Board
-`GET https://<TEAM DOMAIN>.upwave.io/api/boards/<ID>`
+`GET https://<TEAM DOMAIN>.upwave.io/api/boards/<ID>/`
 
 ```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/boards/1"
+curl "https://<TEAM DOMAIN>.upwave.io/api/boards/1/"
   -H "Authorization: <API TOKEN>"
 ```
 
@@ -151,14 +153,17 @@ Currently there are two triggers in effect on all Boards.
 <aside class="notice">User actions may on rare occasions trigger update events.</aside>
 
 ## Updating a Board
+`POST https://<TEAM DOMAIN>.upwave.io/api/boards/<ID>/`
 
 TODO
 
 ## Creating a new Board
+`POST https://<TEAM DOMAIN>.upwave.io/api/boards/`
 
 TODO
 
 ## Deleting a Board
+`DELETE https://<TEAM DOMAIN>.upwave.io/api/boards/<ID>/`
 
 ```shell
 # Deletes Board with id 1

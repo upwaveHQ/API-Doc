@@ -1,5 +1,7 @@
 # Attachments
 
+Attachments may accompany a Comment and holds a resource link to either an uploaded file, a web resource or a Google Drive file.
+
 ## List Attachments
 
 `GET https://<TEAM DOMAIN>.upwave.io/api/attachments/`
@@ -23,9 +25,9 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/attachments/"
         "card": 5,
         "name": "sketch.png",
         "source": "uploadedfile",
-        "url": "https://ninja-dev-uploads.s3.amazonaws.com/asd/BVCKxWmCTcevo7mBy1nB_avatar_nisse.gif",
-        "preview_url": "https://ninja-dev-uploads.s3.amazonaws.com/asd/md1WViRniVqCZWO8NLpQ_preview_avatar_nisse.gif",
-        "cover_url": "https://ninja-dev-uploads.s3.amazonaws.com/asd/yNnwS9nvSgepQvbjJFV4_cover_avatar_nisse.gif",
+        "url": "some.image.url,
+        "preview_url": "some.image.url",
+        "cover_url": "some.image.url",
         "file_size": 5733,
       },
       {
@@ -69,6 +71,7 @@ File sizes will only be listed for files that are either uploaded directly (sour
 <aside class="warning">Attachments can only be created using the Comment api</aside>
 
 ## Deleting an Attachment
+`DELETE https://<TEAM DOMAIN>.upwave.io/api/attachments/<ID>/`
 
 ```shell
 # Deletes attachment with id 3

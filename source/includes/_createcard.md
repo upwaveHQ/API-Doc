@@ -26,6 +26,7 @@ row | Will position the card in this Row (defaults to first Row)
 `* required field`
 
 ## Deleting a Card
+`DELETE https://<TEAM DOMAIN>.upwave.io/api/cards/<ID>/`
 
 ```shell
 # Deletes Card with id 4723
