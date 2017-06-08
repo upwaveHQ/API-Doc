@@ -2,6 +2,17 @@
 
 UpWave Cards is an information carrier that holds task-description, comments, files etc.
 
+### Subscription
+
+A User, when subscribed to a card, will be notified on important changes on that Card.
+A Subscription will start when
+a) a user is assigned a Card,
+b) a user is mentioned in a Comment on a Card
+c) a user choose to Subscribe to a Card
+
+The only way to terminate a subscription is to update the card with *{"subscribe": false}*
+This is also the mechanism for how to manually subscribe to a Card.
+
 ## List Cards
 
 `GET https://<TEAM DOMAIN>.upwave.io/api/cards/`
@@ -122,34 +133,9 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/cards/4723/"
         "avatar": "https://my.profile.image"
       },
     ],
-    "tasklist": [
-      {
-        "id": 1,
-        "text": "Subtask 1",
-        "finished_dt": null
-      },
-      {
-        "id": 2,
-        "text": "Subtask 2",
-        "finished_dt": null
-      }
-    ],
-    "comments": [
-      {
-        "id": 1,
-        "created_dt": "2016-07-13T11:14:28.581Z",
-        "text": "This is a comment on the card and it has some attachments too",
-        "attachments": [
-          {
-            "id": 1,
-            "name": "Beautiful image",
-            "url": "www.some.url/image.png",
-            "preview_url": "www.some.url/preview_image.png",
-            "mime_type": "image/png",
-            "file_size": 0
-          }
-        ]
-      }
-    ]
+    "subscribed": true
   }
 ```
+
+In order to fetch additional data belonging to a Card, such as Comments, Attachments, TaskListItems,
+use the appropriate API with a card-filter. Example: *api/comments/?card=\<CARD ID\>*

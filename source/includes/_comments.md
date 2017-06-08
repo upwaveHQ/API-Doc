@@ -3,6 +3,18 @@
 Comments are posted onto Cards by users.
 A Comment holds a text message and optionally a list of [Attachments](#attachments).
 
+### Mentioning
+
+The content of a Comment may include mentions. If a user is mentioned in a Comment,
+that user will receive a notification and will also be [subscribed](#cards) to the parent Card.
+
+Mention type | Format | Description
+--------- | ------- | ---- | -----------
+User | @{\<USER ID\>} | Mentions the user with id \<USER ID\>
+Group | @{board} | Will notify all members on the parent Board
+
+<aside class="notice">To mention a user, enclose the user's ID in curly brackets with a @ in front - like this: "Hi @{657233}, do you need any help on this Task?"</aside>
+
 ## List Comments
 `GET https://<TEAM DOMAIN>.upwave.io/api/comments/`
 
@@ -32,7 +44,7 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
         },
         "last_edited_dt": null,
         "last_edited_by_user": null,
-        "text": "The number is 42!",
+        "text": "Hi @{2}, did you see my previous comment?",
         "attachments": [
           {
             "id": 3,
@@ -45,6 +57,15 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
             "cover_url": null,
             "file_size": 0,
           }
+        ],
+        "mentions": [
+          {
+          "id": 2,
+          "email": "person2@example.com",
+          "fullname": "Lisa Doe",
+          "firstname": "Lisa",
+          "avatar": "https://my.profile.image"
+        }
         ]
       }
     ]...
