@@ -42,7 +42,7 @@ They are ordered by sort_index which really only makes sense when filtering usin
 
 A TaskListItem is essentially a subtask and consist of a description, a field determining if its finished or not, and a sort index.
 
-### Query Parameters
+### Filters
 
 Parameter | Format | Description
 --------- | ------- | ---- | -----------

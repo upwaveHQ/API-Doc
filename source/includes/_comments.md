@@ -81,6 +81,10 @@ Parameter | Format | Description
 --------- | ------- | ---- | -----------
 created_by_user | `integer` | Filter Comments on what user created them
 card | `integer` | Filter Comments based on their parent Card
+q | `querystring` | Search for querystring in Comment text
+
+When filters are combined they will be AND'ed together. For example to list all Comments created by user 74 **and** which contains the word "Thanks",
+simply combine the filters like so: `?created_by_user=74&q=Thanks`
 
 ## Get a specific Comment
 `GET https://<TEAM DOMAIN>.upwave.io/api/comments/<ID>/`

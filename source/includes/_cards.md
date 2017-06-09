@@ -70,7 +70,7 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/cards/"
 This endpoint retrieves all the Cards you can access in a paginated fashion.
 They are ordered by creation date (created_dt) with the newest Card listed first.
 
-### Query Parameters
+### Filters
 
 Parameter | Format | Description
 --------- | ------- | ---- | -----------
@@ -81,12 +81,16 @@ finished | `true/false` | Filter Cards on whether they are completed or not
 state | `integer` | Filter Cards based on their column state
 board | `integer` | Filter Cards based on their parent Board
 assigned | `1,2,3` | Filter Cards based on who are assigned
+q | `querystring` | Search for querystring in Card title and description
 
 The `assigned` parameter supports comma separated list which will be OR'ed.
 For example, to filter Cards that are assigned to either of user-account 1 or 2 you can pass in:
 `?assigned=1,2`
 
 Date arguments `start_dt` and `end_dt` are given on the format `YYYY-MM-DD`.
+
+When filters are combined they will be AND'ed together. For example to list all Cards that are finished **and** which contains the word "Oslo",
+simply combine the filters like so: `?finished=true&q=Oslo`
 
 ## Get a Specific Card
 
