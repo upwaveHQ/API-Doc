@@ -546,7 +546,7 @@ This is also the mechanism for how to manually subscribe to a Card.</p>
 <p>This endpoint retrieves all the Cards you can access in a paginated fashion.
 They are ordered by creation date (created_dt) with the newest Card listed first.</p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="filters">Filters</h3>
 
 <table><thead>
 <tr>
@@ -590,6 +590,11 @@ They are ordered by creation date (created_dt) with the newest Card listed first
 <td><code class="prettyprint">1,2,3</code></td>
 <td>Filter Cards based on who are assigned</td>
 </tr>
+<tr>
+<td>q</td>
+<td><code class="prettyprint">querystring</code></td>
+<td>Search for querystring in Card title and description</td>
+</tr>
 </tbody></table>
 
 <p>The <code class="prettyprint">assigned</code> parameter supports comma separated list which will be OR&#39;ed.
@@ -597,6 +602,9 @@ For example, to filter Cards that are assigned to either of user-account 1 or 2 
 <code class="prettyprint">?assigned=1,2</code></p>
 
 <p>Date arguments <code class="prettyprint">start_dt</code> and <code class="prettyprint">end_dt</code> are given on the format <code class="prettyprint">YYYY-MM-DD</code>.</p>
+
+<p>When filters are combined they will be AND&#39;ed together. For example to list all Cards that are finished <strong>and</strong> which contains the word &ldquo;Oslo&rdquo;,
+simply combine the filters like so: <code class="prettyprint">?finished=true&amp;q=Oslo</code></p>
 
 <h2 id="get-a-specific-card">Get a Specific Card</h2>
 
@@ -806,7 +814,7 @@ They are ordered by sort_index which really only makes sense when filtering usin
 
 <p>A TaskListItem is essentially a subtask and consist of a description, a field determining if its finished or not, and a sort index.</p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="filters">Filters</h3>
 
 <table><thead>
 <tr>
@@ -1008,7 +1016,15 @@ They are ordered by creation date (created_dt) with the newest Comment listed fi
 <td><code class="prettyprint">integer</code></td>
 <td>Filter Comments based on their parent Card</td>
 </tr>
+<tr>
+<td>q</td>
+<td><code class="prettyprint">querystring</code></td>
+<td>Search for querystring in Comment text</td>
+</tr>
 </tbody></table>
+
+<p>When filters are combined they will be AND&#39;ed together. For example to list all Comments created by user 74 <strong>and</strong> which contains the word &ldquo;Thanks&rdquo;,
+simply combine the filters like so: <code class="prettyprint">?created_by_user=74&amp;q=Thanks</code></p>
 
 <h2 id="get-a-specific-comment">Get a specific Comment</h2>
 
