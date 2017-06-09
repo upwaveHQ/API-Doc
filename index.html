@@ -482,6 +482,17 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/1/"</spa
 
 <p>UpWave Cards is an information carrier that holds task-description, comments, files etc.</p>
 
+<h3 id="subscription">Subscription</h3>
+
+<p>A User, when subscribed to a card, will be notified on important changes on that Card.
+A Subscription will start when
+a) a user is assigned a Card,
+b) a user is mentioned in a Comment on a Card
+c) a user choose to Subscribe to a Card</p>
+
+<p>The only way to terminate a subscription is to update the card with <em>{&ldquo;subscribe&rdquo;: false}</em>
+This is also the mechanism for how to manually subscribe to a Card.</p>
+
 <h2 id="list-cards">List Cards</h2>
 
 <p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/</code></p>
@@ -629,37 +640,12 @@ For example, to filter Cards that are assigned to either of user-account 1 or 2 
         </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
       </span><span class="p">},</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"tasklist"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Subtask 1"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Subtask 2"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"comments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-07-13T11:14:28.581Z"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This is a comment on the card and it has some attachments too"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"attachments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Beautiful image"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.some.url/image.png"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"www.some.url/preview_image.png"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"mime_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
+    </span><span class="s2">"subscribed"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span></code></pre>
+<p>In order to fetch additional data belonging to a Card, such as Comments, Attachments, TaskListItems,
+use the appropriate API with a card-filter. Example: <em>api/comments/?card=&lt;CARD ID&gt;</em></p>
+
           <h2 id="updating-a-card">Updating a Card</h2>
 
 <p><code class="prettyprint">PATCH https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/&lt;ID&gt;/</code></p>
@@ -710,7 +696,12 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/
 <tr>
 <td>sort_before</td>
 <td><code class="prettyprint">integer</code></td>
-<td>sorts this Card before given Card id. (0 will sort last)</td>
+<td>sorts this Card before given Card id (0 will sort last)</td>
+</tr>
+<tr>
+<td>subscribe</td>
+<td><code class="prettyprint">boolean</code></td>
+<td>Subscribe/unsubscribe user for notifications on this Card</td>
 </tr>
 </tbody></table>
 
@@ -915,6 +906,32 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/1
 <p>Comments are posted onto Cards by users.
 A Comment holds a text message and optionally a list of <a href="#attachments">Attachments</a>.</p>
 
+<h3 id="mentioning">Mentioning</h3>
+
+<p>The content of a Comment may include mentions. If a user is mentioned in a Comment,
+that user will receive a notification and will also be <a href="#cards">subscribed</a> to the parent Card.</p>
+
+<table><thead>
+<tr>
+<th>Mention type</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>User</td>
+<td>@{&lt;USER ID&gt;}</td>
+<td>Mentions the user with id &lt;USER ID&gt;</td>
+</tr>
+<tr>
+<td>Group</td>
+<td>@{board}</td>
+<td>Will notify all members on the parent Board</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">To mention a user, enclose the user&rsquo;s ID in curly brackets with a @ in front - like this: &ldquo;Hi @{657233}, do you need any help on this Task?&rdquo;</aside>
+
 <h2 id="list-comments">List Comments</h2>
 
 <p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/</code></p>
@@ -942,7 +959,7 @@ A Comment holds a text message and optionally a list of <a href="#attachments">A
         </span><span class="p">},</span><span class="w">
         </span><span class="s2">"last_edited_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
         </span><span class="s2">"last_edited_by_user"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The number is 42!"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hi @{2}, did you see my previous comment?"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"attachments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="p">{</span><span class="w">
             </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
@@ -955,6 +972,15 @@ A Comment holds a text message and optionally a list of <a href="#attachments">A
             </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
             </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
           </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"mentions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person2@example.com"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa Doe"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="err">...</span><span class="w">
