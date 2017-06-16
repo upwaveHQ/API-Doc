@@ -480,18 +480,18 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/1/"</spa
 
           <h1 id="cards">Cards</h1>
 
-<p>UpWave Cards is an information carrier that holds task-description, comments, files etc.</p>
+<p>UpWave Cards are information carriers that can hold task-description, comments, files etc.</p>
 
-<h3 id="subscription">Subscription</h3>
+<h3 id="watching-a-card">Watching a Card</h3>
 
-<p>A User, when subscribed to a card, will be notified on important changes on that Card.
-A Subscription will start when
-a) a user is assigned a Card,
-b) a user is mentioned in a Comment on a Card
-c) a user choose to Subscribe to a Card</p>
+<p>A User, when on a watch list to a Card, will be notified on important changes on that Card.
+The user will automatically be added to the watch list when..
+a) the user is assigned a Card,
+b) the user is mentioned in a Comment on a Card
+c) the user choose to watch the Card</p>
 
-<p>The only way to terminate a subscription is to update the card with <em>{&ldquo;subscribe&rdquo;: false}</em>
-This is also the mechanism for how to manually subscribe to a Card.</p>
+<p>The only way to unwatch is to update the card with <em>{&ldquo;watch&rdquo;: false}</em>
+This is also the mechanism for how to manually add oneselves to the watch list.</p>
 
 <h2 id="list-cards">List Cards</h2>
 
@@ -648,7 +648,7 @@ simply combine the filters like so: <code class="prettyprint">?finished=true&amp
         </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
       </span><span class="p">},</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"subscribed"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="s2">"watched"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>In order to fetch additional data belonging to a Card, such as Comments, Attachments, TaskListItems,
@@ -707,9 +707,9 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/
 <td>sorts this Card before given Card id (0 will sort last)</td>
 </tr>
 <tr>
-<td>subscribe</td>
+<td>watch</td>
 <td><code class="prettyprint">boolean</code></td>
-<td>Subscribe/unsubscribe user for notifications on this Card</td>
+<td>Watch/Unwatch user for commment notifications on this Card</td>
 </tr>
 </tbody></table>
 
@@ -917,7 +917,7 @@ A Comment holds a text message and optionally a list of <a href="#attachments">A
 <h3 id="mentioning">Mentioning</h3>
 
 <p>The content of a Comment may include mentions. If a user is mentioned in a Comment,
-that user will receive a notification and will also be <a href="#cards">subscribed</a> to the parent Card.</p>
+that user will receive a notification and will also be added to a <a href="#cards">watch list</a> for the Card.</p>
 
 <table><thead>
 <tr>
