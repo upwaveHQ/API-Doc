@@ -6,7 +6,7 @@ A Comment holds a text message and optionally a list of [Attachments](#attachmen
 ### Mentioning
 
 The content of a Comment may include mentions. If a user is mentioned in a Comment,
-that user will receive a notification and will also be [subscribed](#cards) to the parent Card.
+that user will receive a notification and will also be added to a [watch list](#cards) for the Card.
 
 Mention type | Format | Description
 --------- | ------- | ---- | -----------

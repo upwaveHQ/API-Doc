@@ -1,17 +1,17 @@
 # Cards
 
-UpWave Cards is an information carrier that holds task-description, comments, files etc.
+UpWave Cards are information carriers that can hold task-description, comments, files etc.
 
-### Subscription
+### Watching a Card
 
-A User, when subscribed to a card, will be notified on important changes on that Card.
-A Subscription will start when
-a) a user is assigned a Card,
-b) a user is mentioned in a Comment on a Card
-c) a user choose to Subscribe to a Card
+A User, when on a watch list to a Card, will be notified on important changes on that Card.
+The user will automatically be added to the watch list when..
+a) the user is assigned a Card,
+b) the user is mentioned in a Comment on a Card
+c) the user choose to watch the Card
 
-The only way to terminate a subscription is to update the card with *{"subscribe": false}*
-This is also the mechanism for how to manually subscribe to a Card.
+The only way to unwatch is to update the card with *{"watch": false}*
+This is also the mechanism for how to manually add oneselves to the watch list.
 
 ## List Cards
 
@@ -137,7 +137,7 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/cards/4723/"
         "avatar": "https://my.profile.image"
       },
     ],
-    "subscribed": true
+    "watched": true
   }
 ```
 
