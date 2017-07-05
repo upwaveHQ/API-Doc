@@ -75,19 +75,25 @@ They are ordered by creation date (created_dt) with the newest Card listed first
 Parameter | Format | Description
 --------- | ------- | ---- | -----------
 created_by_user | `integer` | Filter Cards on what user created them
-start_dt | `YYYY-MM-DD` | Filter Cards that has due_dt on or after this date
-end_dt | `YYYY-MM-DD` | Filter Cards that has due_dt on or before this date
+created_start | `YYYY-MM-DD` | Filter Cards that were created on or after this date
+created_end | `YYYY-MM-DD` | Filter Cards that were created on or before this date
+due_start | `YYYY-MM-DD` | Filter Cards that have due_dt on or after this date
+due_end | `YYYY-MM-DD` | Filter Cards that have due_dt on or before this date
+finished_start | `YYYY-MM-DD` | Filter Cards that were completed on or after this date
+finished_end | `YYYY-MM-DD` | Filter Cards that were completed on or before this date
 finished | `true/false` | Filter Cards on whether they are completed or not
 state | `integer` | Filter Cards based on their column state
 board | `integer` | Filter Cards based on their parent Board
 assigned | `1,2,3` | Filter Cards based on who are assigned
 q | `querystring` | Search for querystring in Card title and description
+ordering | `field` | Order result-set by field.
 
 The `assigned` parameter supports comma separated list which will be OR'ed.
 For example, to filter Cards that are assigned to either of user-account 1 or 2 you can pass in:
 `?assigned=1,2`
 
-Date arguments `start_dt` and `end_dt` are given on the format `YYYY-MM-DD`.
+The ordering parameter will order the result-set on the field given. Acceptable fields are:
+"created", "finished", "due". To specify a descending ordering direction set a minus in front e.g. `?ordering=-created`
 
 When filters are combined they will be AND'ed together. For example to list all Cards that are finished **and** which contains the word "Oslo",
 simply combine the filters like so: `?finished=true&q=Oslo`
