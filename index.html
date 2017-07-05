@@ -561,14 +561,34 @@ They are ordered by creation date (created_dt) with the newest Card listed first
 <td>Filter Cards on what user created them</td>
 </tr>
 <tr>
-<td>start_dt</td>
+<td>created_start</td>
 <td><code class="prettyprint">YYYY-MM-DD</code></td>
-<td>Filter Cards that has due_dt on or after this date</td>
+<td>Filter Cards that were created on or after this date</td>
 </tr>
 <tr>
-<td>end_dt</td>
+<td>created_end</td>
 <td><code class="prettyprint">YYYY-MM-DD</code></td>
-<td>Filter Cards that has due_dt on or before this date</td>
+<td>Filter Cards that were created on or before this date</td>
+</tr>
+<tr>
+<td>due_start</td>
+<td><code class="prettyprint">YYYY-MM-DD</code></td>
+<td>Filter Cards that have due_dt on or after this date</td>
+</tr>
+<tr>
+<td>due_end</td>
+<td><code class="prettyprint">YYYY-MM-DD</code></td>
+<td>Filter Cards that have due_dt on or before this date</td>
+</tr>
+<tr>
+<td>finished_start</td>
+<td><code class="prettyprint">YYYY-MM-DD</code></td>
+<td>Filter Cards that were completed on or after this date</td>
+</tr>
+<tr>
+<td>finished_end</td>
+<td><code class="prettyprint">YYYY-MM-DD</code></td>
+<td>Filter Cards that were completed on or before this date</td>
 </tr>
 <tr>
 <td>finished</td>
@@ -595,13 +615,19 @@ They are ordered by creation date (created_dt) with the newest Card listed first
 <td><code class="prettyprint">querystring</code></td>
 <td>Search for querystring in Card title and description</td>
 </tr>
+<tr>
+<td>ordering</td>
+<td><code class="prettyprint">field</code></td>
+<td>Order result-set by field.</td>
+</tr>
 </tbody></table>
 
 <p>The <code class="prettyprint">assigned</code> parameter supports comma separated list which will be OR&#39;ed.
 For example, to filter Cards that are assigned to either of user-account 1 or 2 you can pass in:
 <code class="prettyprint">?assigned=1,2</code></p>
 
-<p>Date arguments <code class="prettyprint">start_dt</code> and <code class="prettyprint">end_dt</code> are given on the format <code class="prettyprint">YYYY-MM-DD</code>.</p>
+<p>The ordering parameter will order the result-set on the field given. Acceptable fields are:
+&ldquo;created&rdquo;, &ldquo;finished&rdquo;, &ldquo;due&rdquo;. To specify a descending ordering direction set a minus in front e.g. <code class="prettyprint">?ordering=-created</code></p>
 
 <p>When filters are combined they will be AND&#39;ed together. For example to list all Cards that are finished <strong>and</strong> which contains the word &ldquo;Oslo&rdquo;,
 simply combine the filters like so: <code class="prettyprint">?finished=true&amp;q=Oslo</code></p>
