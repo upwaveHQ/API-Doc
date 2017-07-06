@@ -68,8 +68,10 @@ The token can be obtained by visiting your account settings. Click your profile 
 
 # Pagination
 
-Requests that return multiple items always comes paginated. The pagination size is set to 100.
+Requests that return multiple items always comes paginated. The default pagination size is set to 50 whereas the max pagination size is 100.
 Follow the "next" and "previous" urls to turn the pages. The actual list of items are kept within the **results** block.
+
+For most of the API endpoints, a page_size parameter can be issued to control the size.
 
 <aside class="notice">In paginated responses the list of items are held within the <strong>results</strong> block.</aside>
 

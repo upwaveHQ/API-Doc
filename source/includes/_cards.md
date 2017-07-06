@@ -86,7 +86,8 @@ state | `integer` | Filter Cards based on their column state
 board | `integer` | Filter Cards based on their parent Board
 assigned | `1,2,3` | Filter Cards based on who are assigned
 q | `querystring` | Search for querystring in Card title and description
-ordering | `field` | Order result-set by field.
+ordering | `field` | Order result-set by field (default "-created")
+page_size | `integer` | Size of result-set per page
 
 The `assigned` parameter supports comma separated list which will be OR'ed.
 For example, to filter Cards that are assigned to either of user-account 1 or 2 you can pass in:
@@ -95,8 +96,8 @@ For example, to filter Cards that are assigned to either of user-account 1 or 2 
 The ordering parameter will order the result-set on the field given. Acceptable fields are:
 "created", "finished", "due". To specify a descending ordering direction set a minus in front e.g. `?ordering=-created`
 
-When filters are combined they will be AND'ed together. For example to list all Cards that are finished **and** which contains the word "Oslo",
-simply combine the filters like so: `?finished=true&q=Oslo`
+When filters are combined they will be AND'ed together. For example to list all Cards that were 
+completed in month July 2017, combine filters like so: `?finished_start=2017-07-1&finished_end=2017-07-31`
 
 ## Get a Specific Card
 
