@@ -263,8 +263,10 @@ curl <span class="s2">"&lt;API ENDPOINT&gt;"</span>
 
 <h1 id="pagination">Pagination</h1>
 
-<p>Requests that return multiple items always comes paginated. The pagination size is set to 100.
+<p>Requests that return multiple items always comes paginated. The default pagination size is set to 50 whereas the max pagination size is 100.
 Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages. The actual list of items are kept within the <strong>results</strong> block.</p>
+
+<p>For most of the API endpoints, a page_size parameter can be issued to control the size.</p>
 
 <aside class="notice">In paginated responses the list of items are held within the <strong>results</strong> block.</aside>
 
@@ -618,7 +620,12 @@ They are ordered by creation date (created_dt) with the newest Card listed first
 <tr>
 <td>ordering</td>
 <td><code class="prettyprint">field</code></td>
-<td>Order result-set by field.</td>
+<td>Order result-set by field (default &ldquo;-created&rdquo;)</td>
+</tr>
+<tr>
+<td>page_size</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Size of result-set per page</td>
 </tr>
 </tbody></table>
 
@@ -629,8 +636,8 @@ For example, to filter Cards that are assigned to either of user-account 1 or 2 
 <p>The ordering parameter will order the result-set on the field given. Acceptable fields are:
 &ldquo;created&rdquo;, &ldquo;finished&rdquo;, &ldquo;due&rdquo;. To specify a descending ordering direction set a minus in front e.g. <code class="prettyprint">?ordering=-created</code></p>
 
-<p>When filters are combined they will be AND&#39;ed together. For example to list all Cards that are finished <strong>and</strong> which contains the word &ldquo;Oslo&rdquo;,
-simply combine the filters like so: <code class="prettyprint">?finished=true&amp;q=Oslo</code></p>
+<p>When filters are combined they will be AND&#39;ed together. For example to list all Cards that were 
+completed in month July 2017, combine filters like so: <code class="prettyprint">?finished_start=2017-07-1&amp;finished_end=2017-07-31</code></p>
 
 <h2 id="get-a-specific-card">Get a Specific Card</h2>
 
