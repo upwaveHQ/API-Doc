@@ -16,4 +16,4 @@ This repo was forked from https://github.com/lord/slate
 
 There is nothing secret about this repo - just our documentation for the UpWave API.
 
-To read the docs, visit https://upwavehq.github.io/slate/
+To read the docs, visit https://www.upwave.io/api
