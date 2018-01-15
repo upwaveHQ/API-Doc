@@ -270,6 +270,60 @@ Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages.
 
 <aside class="notice">In paginated responses the list of items are held within the <strong>results</strong> block.</aside>
 
+          <h1 id="members">Members</h1>
+
+<p>A Team has Team Members, a Board has Board Members. A Member is a user account tied to an entity such as Team or Board.</p>
+
+<h2 id="list-team-members">List Team Members</h2>
+
+<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/members/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/members/"</span>
+  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person@example.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="arguments">Arguments</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>board</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Lists only members that have direct access to the given Board</td>
+</tr>
+<tr>
+<td>ordering</td>
+<td>&ldquo;created&rdquo;/&ldquo;seen&rdquo;</td>
+<td>Order result list</td>
+</tr>
+<tr>
+<td>page_size</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Size of result-set per page</td>
+</tr>
+</tbody></table>
+
           <h1 id="boards">Boards</h1>
 
 <p>An UpWave Board is a surface where Cards live. The Board consist of columns, rows and colors which together forms the structure of the Board.</p>
@@ -309,22 +363,6 @@ Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages.
 </span></code></pre>
 <p>This endpoint retrieves all the Boards you can access in a paginated fashion.
 They are ordered by creation date (created_dt) with the newest Board listed first.</p>
-
-<h3 id="query-parameters">Query Parameters</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>include_columns</td>
-<td><code class="prettyprint">false</code></td>
-<td>If set to <code class="prettyprint">true</code>, the result will also include columns for each board.</td>
-</tr>
-</tbody></table>
 
 <h2 id="get-a-specific-board">Get a Specific Board</h2>
 
