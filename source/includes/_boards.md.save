@@ -41,13 +41,10 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/boards/"
 This endpoint retrieves all the Boards you can access in a paginated fashion.
 They are ordered by creation date (created_dt) with the newest Board listed first.
 
-### Filters
+Parameter | Default | Description
+--------- | ------- | -----------
+include_columns | `false` | If set to `true`, the result will also include columns for each board.
 
-Parameter | Format | Description
---------- | ------- | ---- | -----------
-q | `querystring` | Search for querystring in Board title
-ordering | `field` | Order result-set by field (default "title")
-page_size | `integer` | Size of result-set per page
 
 ## Get a Specific Board
 `GET https://<TEAM DOMAIN>.upwave.io/api/boards/<ID>/`
