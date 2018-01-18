@@ -1,6 +1,6 @@
 # Errors
 
-The UpWave API uses the following error codes:
+The Upwave API uses the following error codes:
 
 Error Code | Meaning
 ---------- | -------

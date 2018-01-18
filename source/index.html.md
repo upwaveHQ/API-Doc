@@ -63,10 +63,6 @@ For clients to authenticate, the token key should be included in the Authorizati
 
 The token can be obtained by visiting your account settings. Click your profile image, select "Settings" and find your API-Key in the "Account" tab.
 
-
-
-
-
 # Pagination
 
 Requests that return multiple items always comes paginated. The default pagination size is set to 50 whereas the max pagination size is 100.
@@ -77,4 +73,8 @@ For most of the API endpoints, a page_size parameter can be issued to control th
 <aside class="notice">In paginated responses the list of items are held within the <strong>results</strong> block.</aside>
 
 
+# Throttling
+
+All api requests are throttled. This means you will receive a status code of 429 "Too Many Requests" if you exceed our limits.
+We have two quotas to control this; one per hour (for bursts) and one per day.
 
