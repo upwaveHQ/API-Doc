@@ -270,6 +270,11 @@ Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages.
 
 <aside class="notice">In paginated responses the list of items are held within the <strong>results</strong> block.</aside>
 
+<h1 id="throttling">Throttling</h1>
+
+<p>All api requests are throttled. This means you will receive a status code of 429 &ldquo;Too Many Requests&rdquo; if you exceed our limits.
+We have two quotas to control this; one per hour (for bursts) and one per day.</p>
+
           <h1 id="members">Members</h1>
 
 <p>A Team has Team Members, a Board has Board Members. A Member is a user account tied to an entity such as Team or Board.</p>
@@ -363,6 +368,32 @@ Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages.
 </span></code></pre>
 <p>This endpoint retrieves all the Boards you can access in a paginated fashion.
 They are ordered by creation date (created_dt) with the newest Board listed first.</p>
+
+<h3 id="filters">Filters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>q</td>
+<td><code class="prettyprint">querystring</code></td>
+<td>Search for querystring in Board title</td>
+</tr>
+<tr>
+<td>ordering</td>
+<td><code class="prettyprint">field</code></td>
+<td>Order result-set by field (default &ldquo;title&rdquo;)</td>
+</tr>
+<tr>
+<td>page_size</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Size of result-set per page</td>
+</tr>
+</tbody></table>
 
 <h2 id="get-a-specific-board">Get a Specific Board</h2>
 
@@ -1328,7 +1359,7 @@ When deleting an Attachment, the comment will be set as edited by you.</p>
 
           <h1 id="errors">Errors</h1>
 
-<p>The UpWave API uses the following error codes:</p>
+<p>The Upwave API uses the following error codes:</p>
 
 <table><thead>
 <tr>
