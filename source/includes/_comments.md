@@ -185,6 +185,8 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
 ```
 
 Currently the public API only support adding URL-Attachments to a Comment.
+To make the URL appear as a clickable image, you may set the "preview_url" attribute pointing to an image of your choice.
+The image URL needs to be behind HTTPS protocol and the image should be 200x200 pixels in size.
 
 Argument | Description
 -------- | -----------
