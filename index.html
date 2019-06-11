@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>UpWave API Reference</title>
+    <title>Upwave API Reference</title>
 
     <style>
       .highlight table td { padding: 5px; }
@@ -227,32 +227,41 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the UpWave API!</p>
+<p><strong>Welcome to the Upwave API!</strong></p>
 
-<p>This API is in it&rsquo;s early infant stages but will indeed help you out if you are looking for ways to list 
-cards and boards. It also have some means of updating your data.</p>
+<p>This API will give you the means to integrate Upwave into your projects.
+Typical use cases would be to list/find resources or create Cards/Comments in Upwave programatically.</p>
 
-<p>As this API is considered extremely early beta, some sections may be tagged with TODO.</p>
+<p>If you have any problems or requests please file an issue in the <a href="https://github.com/upwaveHQ/api">Upwave API GitHub repo</a>.</p>
 
-<p>If you have any problems or requests please file an issue in our <a href="https://github.com/upwaveHQ/api">UpWave API GitHub repo</a>.</p>
+<h1 id="api-endpoints">API Endpoints</h1>
 
-<h3 id="api-endpoint">API Endpoint</h3>
+<h2 id="workspaces">Workspaces</h2>
 
-<p>Since UpWave confines each team with its own unique subdomain (e.g. mycompany.upwave.io),
-the API endpoint will reflect this by being directly below your team location.
-For example if your team domain is <em>myteam</em> the endpoint will be:</p>
+<p><code class="prettyprint">https://api.upwave.io/workspaces/</code></p>
 
-<p><code class="prettyprint">API endpoint example: https://myteam.upwave.io/api/</code></p>
+<p>This is the most likely the endpoint you are looking for. It will list all the Workspaces you have access to.
+Digging deeper into its structure, it will allow listing, modifying and creating entities such as Cards.</p>
 
-<aside class="notice">Remember that your API endpoint rests below <strong>your</strong> team domain - referred to as &lt;TEAM DOMAIN&gt; throughout this document.</aside>
+<h2 id="notifications">Notifications</h2>
+
+<p><code class="prettyprint">https://api.upwave.io/notifications/</code></p>
+
+<p>Personal notifications are listed by this endpoint. It only supports the GET method.</p>
+
+<h2 id="auth">Auth</h2>
+
+<p><code class="prettyprint">https://api.upwave.io/auth/</code></p>
+
+<p>The auth endpoint can be used to check your authentication. It only support the GET method, and will return your account data.</p>
 
 <h1 id="authentication">Authentication</h1>
 <pre class="highlight shell tab-shell"><code><span class="c"># Authenticate to any API ENDPOINT by adding the Authorization header</span>
-curl <span class="s2">"&lt;API ENDPOINT&gt;"</span>
-  -H <span class="s1">'Authorization: Token &lt;API TOKEN&gt;'</span>
+curl <span class="s2">"https://api.upwave.io/auth/"</span>
+  -H <span class="s1">'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'</span>
 </code></pre>
 <blockquote>
-<p>Make sure to replace <code class="prettyprint">&lt;API TOKEN&gt;</code> with your own.</p>
+<p>Make sure to replace the API Token with your own.</p>
 </blockquote>
 
 <p>For clients to authenticate, the token key should be included in the Authorization HTTP header. The key should be prefixed by the string literal &ldquo;Token&rdquo;, with whitespace separating the two strings. For example:</p>
@@ -261,110 +270,267 @@ curl <span class="s2">"&lt;API ENDPOINT&gt;"</span>
 
 <p>The token can be obtained by visiting your account settings. Click your profile image, select &ldquo;Settings&rdquo; and find your API-Key in the &ldquo;Account&rdquo; tab.</p>
 
+<aside class="notice">The token is personal - Do not share it with others</aside>
+
+<h2 id="restrictions">Restrictions</h2>
+
+<p>If a Workspace is linked to a social account (e.g. Google G Suite, Microsoft 365), your API requests may be rejected if you have not proven that you have successfully authenticated using that social provider.</p>
+
 <h1 id="pagination">Pagination</h1>
 
-<p>Requests that return multiple items always comes paginated. The default pagination size is set to 50 whereas the max pagination size is 100.
-Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; urls to turn the pages. The actual list of items are kept within the <strong>results</strong> block.</p>
+<p>GET requests that return multiple items always comes paginated. The default pagination size is set to 50 whereas the max pagination size is 100.
+Follow the &ldquo;next&rdquo; and &ldquo;previous&rdquo; URLs to turn the pages. The actual list of items are kept within the <strong>results</strong> block.</p>
 
-<p>For most of the API endpoints, a page_size parameter can be issued to control the size.</p>
+<p>For most of the requests, a <code class="prettyprint">page_size</code> parameter can be issued to control the size.</p>
 
 <aside class="notice">In paginated responses the list of items are held within the <strong>results</strong> block.</aside>
 
 <h1 id="throttling">Throttling</h1>
 
-<p>All api requests are throttled. This means you will receive a status code of 429 &ldquo;Too Many Requests&rdquo; if you exceed our limits.
+<p>All API requests are throttled. This means you will receive a status code of 429 &ldquo;Too Many Requests&rdquo; if you exceed our limits.
 We have two quotas to control this; one per hour (for bursts) and one per day.</p>
 
-          <h1 id="members">Members</h1>
+<h1 id="access-levels">Access levels</h1>
 
-<p>A Team has Team Members, a Board has Board Members. A Member is a user account tied to an entity such as Team or Board.</p>
+<p>In the examples throughout this docs, you will notice the <strong>access</strong> block.
+This block shows what access you have on the object in question.</p>
 
-<h2 id="list-team-members">List Team Members</h2>
+<p>It consist of 3 parts:</p>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/members/</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/members/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<ul>
+<li>can_edit</li>
+<li>can_create</li>
+<li>can_delete</li>
+</ul>
+
+<aside class="notice">There is no need for a <i>can_view</i>-access. All data returned is always personalized.</aside>
+
+<h2 id="access-can_edit">Access can_edit</h2>
+
+<p>The <em>can_edit</em> attribute determines if you have the privileges of editing the object.
+For example if the object is a Board entity, you will be able to edit its title and settings.</p>
+
+<h2 id="access-can_create">Access can_create</h2>
+
+<p>The <em>can_create</em> attribute determines if you have the privileges to create sub objects on the object.
+For example if the object is a Board entity you will be able to create Cards or Board structure objects like Colors, Columns or Rows.</p>
+
+<h2 id="access-can_delete">Access can_delete</h2>
+
+<p>The <em>can_delete</em> attribute determines if you have the privileges to delete the object.</p>
+
+          <h1 id="workspaces">Workspaces</h1>
+
+<p>A Workspace is the highest entity in Upwave.
+All data that is not directly tied to a users personal account is stored here.</p>
+
+<h2 id="view-a-workspace">View a Workspace</h2>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/1337/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Acme Corporation"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"logo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"access"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"can_edit"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"can_create"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"can_delete"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h2 id="list-workspaces">List Workspaces</h2>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="err">None</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="err">None</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1337</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Acme Corporation"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"access"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"can_edit"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"can_create"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"can_delete"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+          <h1 id="teams">Teams</h1>
+
+<p>A Team in Upwave is a container for Boards.</p>
+
+<h2 id="view-a-team">View a Team</h2>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/teams/482/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/1337/teams/482/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">482</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"R &amp; D"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#00796b"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"hex_text_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#ffffff"</span><span class="w">
+    </span><span class="s2">"access"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"can_edit"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"can_create"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"can_delete"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h2 id="list-teams">List Teams</h2>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/teams/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/1337/teams/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
     </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person@example.com"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-      </span><span class="p">}</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">482</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"R &amp; D"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"access"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"can_edit"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"can_create"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"can_delete"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
-<h3 id="arguments">Arguments</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Format</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>board</td>
-<td><code class="prettyprint">integer</code></td>
-<td>Lists only members that have direct access to the given Board</td>
-</tr>
-<tr>
-<td>ordering</td>
-<td>&ldquo;created&rdquo;/&ldquo;seen&rdquo;</td>
-<td>Order result list</td>
-</tr>
-<tr>
-<td>page_size</td>
-<td><code class="prettyprint">integer</code></td>
-<td>Size of result-set per page</td>
-</tr>
-</tbody></table>
-
           <h1 id="boards">Boards</h1>
 
-<p>An UpWave Board is a surface where Cards live. The Board consist of columns, rows and colors which together forms the structure of the Board.</p>
+<p>A Board is a container for Cards and will hold some type of structure where the Cards can be positioned.
+The structure-types includes; columns, rows, colors and boxes</p>
 
-<h2 id="list-boards">List Boards</h2>
+<h2 id="view-a-board">View a Board</h2>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/boards/65323/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/1337/boards/65323/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> 
-    </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="err">None</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="err">None</span><span class="p">,</span><span class="w"> 
-    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Awesome UpWave Board"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"purpose"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This Board just has explanatory purpose"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-07-13T10:33:20.581Z"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person@example.com"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="p">,</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">65323</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rocket driven hoverboard"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"purpose"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Development of the new rocket driven hoverboard"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"background_image_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"background_image_thumb_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-04-13T10:33:20.581Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"rows_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"plugin_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"classic"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"team"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">482</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"R &amp; D"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#00796b"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"hex_text_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#ffffff"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coyote@example.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wile E."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"columns"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">52431</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Todo"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
         </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="err">..</span><span class="w">
-      </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">52432</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"In progress"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">52433</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Completed"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"rows"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">23534</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Row-1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"colors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">34511</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"High risk"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">34512</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Low risk"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h2 id="list-boards">List Boards</h2>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/boards/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/1337/boards/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">65323</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rocket driven hoverboard"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"purpose"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Development of the new rocket driven rollerblades"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"background_image_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"background_image_thumb_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-04-13T10:33:20.581Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"rows_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"plugin_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"classic"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"team"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">482</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Development"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#00796b"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"hex_text_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#ffffff"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coyote@example.com"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wile E."</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint retrieves all the Boards you can access in a paginated fashion.
 They are ordered by creation date (created_dt) with the newest Board listed first.</p>
@@ -380,8 +546,8 @@ They are ordered by creation date (created_dt) with the newest Board listed firs
 </thead><tbody>
 <tr>
 <td>q</td>
-<td><code class="prettyprint">querystring</code></td>
-<td>Search for querystring in Board title</td>
+<td><code class="prettyprint">string</code></td>
+<td>Search for Board title matching string</td>
 </tr>
 <tr>
 <td>ordering</td>
@@ -395,224 +561,222 @@ They are ordered by creation date (created_dt) with the newest Board listed firs
 </tr>
 </tbody></table>
 
-<h2 id="get-a-specific-board">Get a Specific Board</h2>
+          <h1 id="members">Members</h1>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/&lt;ID&gt;/</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/1/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<p>A Workspace has Workspace-members, a Team has Team-members, a Board has Board-members.</p>
+
+<p>A membership is inherited upwards in the hierarchy. A membership <em>role</em> is inherited downwards in the hierarchy.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li>Adding a membership on a Board (invite), will automatically add membership on the parent Team and Workspace.</li>
+<li>Updating a Workspace member from role &ldquo;member&rdquo; to role &ldquo;admin&rdquo; will give that user admin privileges on the Workspace and all Teams and Boards within the Workspace.</li>
+<li>Updating a Team member from role &ldquo;member&rdquo; to role &ldquo;admin&rdquo; will give that user admin privileges on the Team and all Boards within the Team.</li>
+</ul>
+
+<h2 id="list-members">List Members</h2>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/members/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/1337/members/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Awesome UpWave Board"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"purpose"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This Board just has explanatory purpose"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-07-13T10:33:20.581Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person@example.com"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="s2">"columns"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"To do"</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"In progress"</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Completed"</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"rows"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Row-1"</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"colors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Red"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#f37477"</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Yellow"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#fed562"</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Green"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#aed581"</span><span class="w">
-      </span><span class="p">}</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coyote@example.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"is_disabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"is_active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"lastname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wile E."</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wile E. Coyote"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last_seen"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-05-21T11:37:41.870358Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-01-5T18:09:12.332Z"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves a specific Board.</p>
+<p>Listing members is always related to an object of type Workspace, Team or Board.</p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="listing-team-members">Listing Team members</h3>
+
+<p>Listing members on team with id 482:</p>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/teams/482/members/</code></p>
+
+<h3 id="listing-board-members">Listing Board members</h3>
+
+<p>Listing members on board with id 65323:</p>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/boards/65323/members/</code></p>
+
+<h3 id="filters">Filters</h3>
 
 <table><thead>
 <tr>
 <th>Parameter</th>
-<th>Default</th>
+<th>Format</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_members</td>
-<td><code class="prettyprint">false</code></td>
-<td>If set to <code class="prettyprint">true</code>, the result will also include members on the board.</td>
+<td>disabled</td>
+<td><code class="prettyprint">boolean</code></td>
+<td>Include or exclude disabled members (only for Workspace members)</td>
+</tr>
+<tr>
+<td>role</td>
+<td><code class="prettyprint">string</code></td>
+<td>Show only members with this role</td>
+</tr>
+<tr>
+<td>q</td>
+<td><code class="prettyprint">string</code></td>
+<td>Search for member (email/name) matching string</td>
+</tr>
+<tr>
+<td>page_size</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Size of result-set per page</td>
 </tr>
 </tbody></table>
-
-<h2 id="note-on-board-structure">Note on Board structure</h2>
-
-<p>The Board has some characteristics worth pointing out.
-The Board structure consists of Colors, Columns and Rows. These 3 dimensions have very different behaviours.</p>
-
-<ul>
-<li>A Board will always have at least one Column and one Row.</li>
-<li>Whereas a Row has no intrinsic purpose other than for the visual aspect, a Column does.</li>
-</ul>
-
-<p><strong>Columns</strong> are used for keeping track of Card statuses. The property <strong>state</strong> on a Column is used as a <em>universal status indicator</em>.
-When a Card is moved to a Column, the card will inherit the status of that Column.</p>
-
-<p>A Column always has one of these states:</p>
-
-<table><thead>
-<tr>
-<th>Column state</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>0</td>
-<td>Not specified</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Not started</td>
-</tr>
-<tr>
-<td>2</td>
-<td>In progress</td>
-</tr>
-<tr>
-<td>3</td>
-<td>Completed</td>
-</tr>
-</tbody></table>
-
-<p>As a result UpWave can aggregate Card statuses across Boards (more on that in the Cards section.
-Also, we have built a triggering system on top of this that you may notice.</p>
-
-<p>Currently there are two triggers in effect on all Boards.</p>
-
-<ul>
-<li>When a card is ticked off as completed, it will automatically be moved to the left-most Column with state 3 (if found).</li>
-<li>When a card is dragged to a Column with state 3, the card will automatically be ticked off as completed.</li>
-</ul>
-
-<aside class="notice">User actions may on rare occasions trigger update events.</aside>
-
-<h2 id="updating-a-board">Updating a Board</h2>
-
-<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/&lt;ID&gt;/</code></p>
-
-<p>TODO</p>
-
-<h2 id="creating-a-new-board">Creating a new Board</h2>
-
-<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/</code></p>
-
-<p>TODO</p>
-
-<h2 id="deleting-a-board">Deleting a Board</h2>
-
-<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/&lt;ID&gt;/</code></p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Deletes Board with id 1</span>
-curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/boards/1/"</span>
-  -X DELETE
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
-</code></pre>
-<p>Right? Yes, look right to see how to delete a Board.</p>
 
           <h1 id="cards">Cards</h1>
 
-<p>UpWave Cards are information carriers that can hold task-description, comments, files etc.</p>
+<p>Upwave Cards are information carriers that can hold a description, comments, files and more.</p>
 
-<h3 id="watching-a-card">Watching a Card</h3>
+<h2 id="view-a-card">View a Card</h2>
 
-<p>A User, when on a watch list to a Card, will be notified on important changes on that Card.
-The user will automatically be added to the watch list when..
-a) the user is assigned a Card,
-b) the user is mentioned in a Comment on a Card
-c) the user choose to watch the Card</p>
+<p><code class="prettyprint">GET https://api.upwave.io/workspace/1337/cards/611785/</code></p>
 
-<p>The only way to unwatch is to update the card with <em>{&ldquo;watch&rdquo;: false}</em>
-This is also the mechanism for how to manually add oneselves to the watch list.</p>
+<p>This endpoint retrieves a specific Card.</p>
+<pre class="highlight shell tab-shell"><code><span class="c"># View card with id 611785</span>
+curl <span class="s2">"https://api.upwave.io/workspace/1337/cards/611785/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
+</code></pre>
+<p>The <code class="prettyprint">cardlocation</code> block will differ depending on what kind of Board we are dealing with (plugin_type <code class="prettyprint">classic</code> vs. plugin_type <code class="prettyprint">canvas</code>).
+For &ldquo;classic&rdquo; boards, the cardlocation will hold column/row information. For &ldquo;canvas&rdquo; boards, the cardlocation will hold container information and offset values.</p>
 
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">611785</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Designing the engine"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h1&gt;Designing the engine&lt;/h1&gt;&lt;p&gt;Since the engine will run on Thorium, we need to ...&lt;/p&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cover_image_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-03-18T14:13:44.921Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"finished_by_user"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-05-04T08:53:24.921Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"due_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-05-05T12:00:00.921Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"archived_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"watched"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"num_comments"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"num_attachments"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"board"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">65323</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rocket driven hoverboard"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="s2">"progress"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"completed"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">52778</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"High risk"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#f080a2"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"assigned"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coyote@example.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wile E."</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"cardlocation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"column"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">52433</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Completed"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"row"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">23534</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Row-1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 <h2 id="list-cards">List Cards</h2>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/cards/</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/1337/cards/"</span>
+  -H <span class="s2">"Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> 
-    </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/?page=2"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="err">None</span><span class="p">,</span><span class="w"> 
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4723</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A Card"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h1&gt;A Card&lt;/h1&gt;&lt;p&gt;More text in a paragraph.&lt;/p&gt;"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-07-13T10:33:26.645Z"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person2@example.com"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa Doe"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-08-04T08:53:24.921Z"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"due_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"assigned"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person1@example.com"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-          </span><span class="p">},</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person2@example.com"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa Doe"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-          </span><span class="p">},</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="err">..</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">611785</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Designing the engine"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h1&gt;Designing the engine&lt;/h1&gt;&lt;p&gt;Since the engine will run on Thorium, we need to ...&lt;/p&gt;"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"cover_image_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-03-18T14:13:44.921Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"finished_by_user"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-05-04T08:53:24.921Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"due_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-05-05T12:00:00.921Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"archived_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"watched"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"num_comments"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"num_attachments"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"board"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">65323</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rocket driven hoverboard"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+            </span><span class="s2">"progress"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"completed"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">52778</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"High risk"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"hex_color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#f080a2"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"access"</span><span class="p">:{</span><span class="w">
+                </span><span class="s2">"can_edit"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"can_delete"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"can_create"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+            </span><span class="s2">"assigned"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coyote@example.com"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wile E."</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint retrieves all the Cards you can access in a paginated fashion.
 They are ordered by creation date (created_dt) with the newest Card listed first.</p>
@@ -683,8 +847,8 @@ They are ordered by creation date (created_dt) with the newest Card listed first
 </tr>
 <tr>
 <td>q</td>
-<td><code class="prettyprint">querystring</code></td>
-<td>Search for querystring in Card title and description</td>
+<td><code class="prettyprint">string</code></td>
+<td>Search for string in Card title and description</td>
 </tr>
 <tr>
 <td>ordering</td>
@@ -705,71 +869,27 @@ For example, to filter Cards that are assigned to either of user-account 1 or 2 
 <p>The ordering parameter will order the result-set on the field given. Acceptable fields are:
 &ldquo;created&rdquo;, &ldquo;finished&rdquo;, &ldquo;due&rdquo;. To specify a descending ordering direction set a minus in front e.g. <code class="prettyprint">?ordering=-created</code></p>
 
-<p>When filters are combined they will be AND&#39;ed together. For example to list all Cards that were 
-completed in month July 2017, combine filters like so: <code class="prettyprint">?finished_start=2017-07-1&amp;finished_end=2017-07-31</code></p>
-
-<h2 id="get-a-specific-card">Get a Specific Card</h2>
-
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/&lt;ID&gt;/</code></p>
-
-<p>This endpoint retrieves a specific Card.</p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4723</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A Card"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;h1&gt;A Card&lt;/h1&gt;&lt;p&gt;More text in a paragraph.&lt;/p&gt;"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"color"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-07-13T10:33:26.645Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person2@example.com"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa Doe"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-08-04T08:53:24.921Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"due_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"assigned"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person1@example.com"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person2@example.com"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa Doe"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-    </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"watched"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>In order to fetch additional data belonging to a Card, such as Comments, Attachments, TaskListItems,
-use the appropriate API with a card-filter. Example: <em>api/comments/?card=&lt;CARD ID&gt;</em></p>
+<p>When filters are combined they will be AND&#39;ed together. For example to list all Cards that were
+completed in month May 2019, combine filters like so: <code class="prettyprint">?finished_start=2019-05-1&amp;finished_end=2019-05-31</code></p>
 
           <h2 id="updating-a-card">Updating a Card</h2>
 
-<p><code class="prettyprint">PATCH https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/&lt;ID&gt;/</code></p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Updates Card 4723</span>
-curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/
-  -H <span class="s1">'Authorization: Token &lt;API_TOKEN&gt;'</span>
+<p><code class="prettyprint">PATCH https://api.upwave.io/workspace/1337/cards/611785/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Updates Card 611785</span>
+curl https://api.upwave.io/workspace/1337/cards/611785/
+  -H <span class="s1">'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'</span>
   -H <span class="s2">"Content-Type: application/json"</span>
-  -X POST
-  -d <span class="s1">'{"description": "My new description", "due_dt": "2017-05-10T09:38:06.459119"}'</span>
+  -X PATCH
+  -d <span class="s1">'{"finished": null}'</span>
 </code></pre>
+<blockquote>
+<p>The above command will uncomplete card 611785</p>
+</blockquote>
+
 <table><thead>
 <tr>
-<th>Allowed field</th>
-<th>Type</th>
+<th>Field</th>
+<th>Format</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
@@ -780,7 +900,7 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/
 </tr>
 <tr>
 <td>due_dt</td>
-<td><code class="prettyprint">datetime-iso</code></td>
+<td><code class="prettyprint">YYYY-MM-DD</code></td>
 <td>updates the cards due-dt. Pass <em>null</em> to remove due-dt</td>
 </tr>
 <tr>
@@ -811,55 +931,77 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/
 <tr>
 <td>watch</td>
 <td><code class="prettyprint">boolean</code></td>
-<td>Watch/Unwatch user for commment notifications on this Card</td>
+<td>Watch/Unwatch youself for commment notifications on this Card</td>
 </tr>
 </tbody></table>
 
 <p>To update a Card you patch in a JSON object with the fields you&rsquo;d like to update.
 For date fields, use UTC.</p>
 
-<aside class="notice">The <strong>title</strong> attribute of a Card cannot be set as it is automatically based on the description fields first line.</aside>
+<aside class="notice">The <strong>title</strong> field on a Card is automatically determined based on the first line of the description.</aside>
+
+<h3 id="watching-a-card">Watching a Card</h3>
+
+<p>A User, when on a watch list to a Card, will be notified on important changes on that Card.
+A User will automatically be added to the watch list when..</p>
+
+<ol>
+<li>the user is assigned a Card,</li>
+<li>the user is mentioned in a Comment on a Card</li>
+<li>the user choose to watch the Card</li>
+</ol>
+
+<p>The only way to unwatch a Card is to update the Card with <em>{&ldquo;watch&rdquo;: false}</em>
+This is also the mechanism for how to manually add oneselves to the watch list.</p>
 
           <h2 id="creating-a-new-card">Creating a new Card</h2>
 
-<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/</code></p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Creates a new Card on Board 311</span>
-curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/
-  -H <span class="s1">'Authorization: Token &lt;API_TOKEN&gt;'</span>
+<p><code class="prettyprint">POST https://api.upwave.io/workspace/1337/cards/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Creates a new Card on Board 65323</span>
+curl https://api.upwave.io/workspace/1337/cards/
+  -H <span class="s1">'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -X POST
-  -d <span class="s1">'{"description": "A new card", "board": 311}'</span>
+  -d <span class="s1">'{"description": "&lt;h1&gt;Order titanium rims&lt;/h1&gt;", "board": 65323}'</span>
 </code></pre>
-<p>The new Card will be sorted last automatically (use update to change it).</p>
+<p>The new Card will be inserted last in the first column with state 1 (use update to change it).
+If no column with state 1 is found, it will be inserted in the first column.</p>
 
 <table><thead>
 <tr>
-<th>Argument</th>
+<th>Field</th>
+<th>Format</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>description*</td>
+<td><code class="prettyprint">string</code></td>
 <td>The content of the Card. May be HTML formatted</td>
 </tr>
 <tr>
 <td>board*</td>
-<td>The parent Board</td>
+<td><code class="prettyprint">integer</code></td>
+<td>The id of the parent Board</td>
 </tr>
 <tr>
 <td>color</td>
-<td>Will set the Color of this card</td>
+<td><code class="prettyprint">integer</code></td>
+<td>The id of the Color</td>
 </tr>
 <tr>
 <td>due_dt</td>
+<td><code class="prettyprint">YYYY-MM-DD</code></td>
 <td>Will set the due_dt of this card</td>
 </tr>
 <tr>
 <td>column</td>
+<td><code class="prettyprint">integer</code></td>
 <td>Will position the card in this Column (defaults to left-most Column with state 1 if exists else left-most Column)</td>
 </tr>
 <tr>
 <td>row</td>
+<td><code class="prettyprint">integer</code></td>
 <td>Will position the card in this Row (defaults to first Row)</td>
 </tr>
 </tbody></table>
@@ -868,51 +1010,49 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/
 
 <h2 id="deleting-a-card">Deleting a Card</h2>
 
-<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/&lt;ID&gt;/</code></p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Deletes Card with id 4723</span>
-curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/cards/4723/"</span>
+<p><code class="prettyprint">DELETE https://api.upwave.io/workspace/1337/cards/611798/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Deletes Card with id 611798</span>
+curl <span class="s2">"https://api.upwave.io/workspace/1337/cards/611798/"</span>
   -X DELETE
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
-<p>Tilt your head right and see how.</p>
-
           <h1 id="tasklistitems">TaskListItems</h1>
 
-<p>TaskListItems is UpWaves way of handling sub-tasks.</p>
+<p>TaskListItems is Upwaves way of handling sub-tasks.</p>
 
 <h2 id="list-tasklistitems">List TaskListItems</h2>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/tasklistitems/?card=417445</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># List TaskListItems on card 417445</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/tasklistitems/?card=417445"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
     </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Write API documentation for TaskListItem"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"sort_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Write tests for TaskListItem API"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-05-18T11:53:41.402858Z"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"sort_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
-      </span><span class="p">}</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3654331</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Book demo meeting"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sort_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">417445</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3654332</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Make purchasing order"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"finished_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-05-18T11:53:41.402858Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sort_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">417445</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves all the TaskListItems you can access in a paginated fashion.
-They are ordered by sort_index which really only makes sense when filtering using the Card parameter.</p>
+<p>This endpoint retrieves all the TaskListItems belonging to the selected card or board object.</p>
 
 <p>A TaskListItem is essentially a subtask and consist of a description, a field determining if its finished or not, and a sort index.</p>
 
@@ -927,41 +1067,51 @@ They are ordered by sort_index which really only makes sense when filtering usin
 </thead><tbody>
 <tr>
 <td>finished</td>
-<td><code class="prettyprint">true/false</code></td>
+<td><code class="prettyprint">boolean</code></td>
 <td>Filter TaskListItems on whether they are completed or not</td>
 </tr>
 <tr>
-<td>card</td>
+<td>*card</td>
 <td><code class="prettyprint">integer</code></td>
 <td>Filter TaskListItems based on their parent Card</td>
 </tr>
+<tr>
+<td>*board</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Filter TaskListItems based on their parent Board</td>
+</tr>
 </tbody></table>
+
+<p><code class="prettyprint">* You must provide either a card or board to filter on</code></p>
 
 <h2 id="creating-a-new-tasklistitem">Creating a new TaskListItem</h2>
 
-<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/</code></p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Creates a new TaskListItem on Card 2</span>
-curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/
-  -H <span class="s1">'Authorization: Token &lt;API_TOKEN&gt;'</span>
+<p><code class="prettyprint">POST https://api.upwave.io/workspaces/1337/tasklistitems/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Creates a new TaskListItem on Card 417445</span>
+curl https://api.upwave.io/workspaces/1337/tasklistitems/
+  -H <span class="s1">'Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -X POST
-  -d <span class="s1">'{"description": "Write tests for Cmment API", "card": 2}'</span>
+  -d <span class="s1">'{"description": "Send item to assembler", "card": 417445}'</span>
 </code></pre>
 <p>The new TaskListItem will be sorted last automatically (use update to change it).</p>
 
 <table><thead>
 <tr>
-<th>Argument</th>
+<th>Field</th>
+<th>Format</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>description*</td>
+<td><code class="prettyprint">string</code></td>
 <td>The description of the TaskListItem</td>
 </tr>
 <tr>
 <td>card*</td>
-<td>The parent Card</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Id of the parent Card</td>
 </tr>
 </tbody></table>
 
@@ -969,17 +1119,21 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/
 
 <h2 id="updating-a-tasklistitem">Updating a TaskListItem</h2>
 
-<p><code class="prettyprint">PATCH https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/&lt;ID&gt;/</code></p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Updates TaskListItem 13</span>
-curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/13/
-  -H <span class="s1">'Authorization: Token &lt;API_TOKEN&gt;'</span>
+<p><code class="prettyprint">PATCH https://api.upwave.io/workspaces/1337/tasklistitems/553113/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Updates TaskListItem 553113</span>
+curl https://api.upwave.io/workspaces/1337/tasklistitems/553113/
+  -H <span class="s1">'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'</span>
   -H <span class="s2">"Content-Type: application/json"</span>
-  -X POST
-  -d <span class="s1">'{"description": "Write tests for Comment API", "finished_dt": "2017-05-10T09:38:06.459119", "sort_before": "12"}'</span>
+  -X PATCH
+  -d <span class="s1">'{"description": "finished": true}'</span>
 </code></pre>
+<blockquote>
+<p>The above command will update the TaskListItem 553113, marking it as completed</p>
+</blockquote>
+
 <table><thead>
 <tr>
-<th>Allowed field</th>
+<th>Field</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
@@ -987,7 +1141,7 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/13/
 <tr>
 <td>description</td>
 <td><code class="prettyprint">string</code></td>
-<td>plain-text</td>
+<td>Plain-text description</td>
 </tr>
 <tr>
 <td>finished</td>
@@ -1003,14 +1157,12 @@ curl https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/13/
 
 <h2 id="deleting-a-tasklistitem">Deleting a TaskListItem</h2>
 
-<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/&lt;ID&gt;/</code></p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Deletes TaskListItem with id 12</span>
-curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/tasklistitems/12/"</span>
+<p><code class="prettyprint">DELETE https://api.upwave.io/workspaces/1337/tasklistitems/553113/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Deletes TaskListItem with id 553113</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/tasklistitems/553113/"</span>
   -X DELETE
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
-<p>Look there &mdash;&mdash;&gt;</p>
-
           <h1 id="comments">Comments</h1>
 
 <p>Comments are posted onto Cards by users.
@@ -1019,7 +1171,7 @@ A Comment holds a text message and optionally a list of <a href="#attachments">A
 <h3 id="mentioning">Mentioning</h3>
 
 <p>The content of a Comment may include mentions. If a user is mentioned in a Comment,
-that user will receive a notification and will also be added to a <a href="#cards">watch list</a> for the Card.</p>
+that user will receive a notification and will also be added to the <a href="#cards">watch list</a> for the Card.</p>
 
 <table><thead>
 <tr>
@@ -1030,8 +1182,8 @@ that user will receive a notification and will also be added to a <a href="#card
 </thead><tbody>
 <tr>
 <td>User</td>
-<td>@{&lt;USER ID&gt;}</td>
-<td>Mentions the user with id &lt;USER ID&gt;</td>
+<td>@{263346}</td>
+<td>Mentions the user with id 263346</td>
 </tr>
 <tr>
 <td>Group</td>
@@ -1040,13 +1192,62 @@ that user will receive a notification and will also be added to a <a href="#card
 </tr>
 </tbody></table>
 
-<aside class="notice">To mention a user, enclose the user&rsquo;s ID in curly brackets with a @ in front - like this: &ldquo;Hi @{657233}, do you need any help on this Task?&rdquo;</aside>
+<aside class="notice">Example comment text: &ldquo;Hi @{263346}, do you need any help on this task?&rdquo;</aside>
 
+<h2 id="view-a-comment">View a Comment</h2>
+
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/comments/687137/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># View comment with id 687137</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/comments/687137/"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">687137</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">611785</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hi @{263346}, do you need any help on this task?"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"last_edited_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"last_edited_by_user"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-05-18T11:37:55.938664Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coyote@example.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wile E."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"attachments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2529</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="mi">687137</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">611785</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Thorim Engine Specs"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"link"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/resource"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"mentions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263346</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rascal@example.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rascal"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 <h2 id="list-comments">List Comments</h2>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/comments/?card=611785</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># List Comments on card with id 611785</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/comments/?card=611785"</span>
+  -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1056,44 +1257,44 @@ that user will receive a notification and will also be added to a <a href="#card
     </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-05-18T11:37:55.938664Z"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person@example.com"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="s2">"last_edited_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"last_edited_by_user"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hi @{2}, did you see my previous comment?"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"attachments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My site"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"link"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.com"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">],</span><span class="w">
-        </span><span class="s2">"mentions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person2@example.com"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa Doe"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lisa"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">687137</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">611785</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hi @{263346}, do you need any help on this task?"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last_edited_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last_edited_by_user"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-05-18T11:37:55.938664Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263345</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"coyote@example.com"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wile E."</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="p">,</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"attachments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2529</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="mi">687137</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">611785</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Thorim Engine Specs"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"link"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/resource"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"mentions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">263346</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rascal@example.com"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rascal"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Coyote"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://path/to/image"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
         </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="err">...</span><span class="w">
+    </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Lists Comments you can access in a paginated fashion.
@@ -1120,74 +1321,36 @@ They are ordered by creation date (created_dt) with the newest Comment listed fi
 </tr>
 <tr>
 <td>q</td>
-<td><code class="prettyprint">querystring</code></td>
-<td>Search for querystring in Comment text</td>
+<td><code class="prettyprint">string</code></td>
+<td>Search for string in Comment text</td>
 </tr>
 </tbody></table>
 
-<p>When filters are combined they will be AND&#39;ed together. For example to list all Comments created by user 74 <strong>and</strong> which contains the word &ldquo;Thanks&rdquo;,
-simply combine the filters like so: <code class="prettyprint">?created_by_user=74&amp;q=Thanks</code></p>
+<p>When filters are combined they will be AND&#39;ed together.
+For example to list all Comments created by user 263345 <strong>and</strong> which contains the word &ldquo;specs&rdquo;,
+simply combine the filters like so: <code class="prettyprint">?created_by_user=263345&amp;q=specs</code></p>
 
-<h2 id="get-a-specific-comment">Get a specific Comment</h2>
-
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/&lt;ID&gt;/</code></p>
-
-<p>Identical to a Comment in the list-format above.</p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/1/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created_dt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-05-18T11:37:55.938664Z"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created_by_user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person@example.com"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"fullname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"firstname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://my.profile.image"</span><span class="p">,</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="s2">"last_edited_dt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"last_edited_by_user"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The number is 42!"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"attachments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mysite"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"link"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mysite.com"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span></code></pre>
 <h2 id="updating-a-comment">Updating a Comment</h2>
 
-<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/&lt;ID&gt;/</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
-  -X POST
-  -d <span class="s1">'{
-        "text": "43!, my mistake"
-      }
-</span></code></pre>
+<p><code class="prettyprint">PATCH https://api.upwave.io/workspaces/1337/comments/687137/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Update Comment with id 687137</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/comments/687137/"</span>
+  -H <span class="s2">"Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
+  -X PATCH
+  -d <span class="s1">'{"text": "..."}'</span>
+</code></pre>
 <p>You are allowed to edit the text in a Comment. Doing so will also update the &ldquo;last_edited_dt&rdquo; and &ldquo;last_edited_by_user&rdquo;.</p>
 
 <table><thead>
 <tr>
-<th>Argument</th>
+<th>Field</th>
+<th>format</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>text</td>
+<td><code class="prettyprint">string</code></td>
 <td>The content of the Comment in plain text format</td>
 </tr>
 </tbody></table>
@@ -1196,23 +1359,23 @@ simply combine the filters like so: <code class="prettyprint">?created_by_user=7
 
 <h2 id="creating-a-new-comment">Creating a new Comment</h2>
 
-<p><code class="prettyprint">POST https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/</code></p>
+<p><code class="prettyprint">POST https://api.upwave.io/workspaces/1337/comments/</code></p>
 
-<p>Create new Comments by passing in a text and which Card it should be posted to.
+<p>Create new Comments by passing in a text and which Card it should be attached to.
 A Comment may also carry Attachments.</p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Creates a new Comment on Card 2</span>
-curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<pre class="highlight shell tab-shell"><code><span class="c"># Creates a new Comment on Card with id 611785</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/comments/"</span>
+  -H <span class="s2">"Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -X POST
   -d <span class="s1">'{
         "text": "Well done!",
-        "card": 2
+        "card": 611785
       }'</span>
 
-<span class="c"># Creates a new Comment with both text and Attachment on Card 2</span>
-curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<span class="c"># Creates a new Comment with both text and Attachment on Card with id 611785</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/comments/"</span>
+  -H <span class="s2">"Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -X POST
   -d <span class="s1">'{
@@ -1223,7 +1386,7 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/"</spa
             "name": "Example"
           }
         ]
-        "card": 2
+        "card": 611785
       }'</span>
 </code></pre>
 <p>Currently the public API only support adding URL-Attachments to a Comment.
@@ -1254,67 +1417,71 @@ The image URL needs to be behind HTTPS protocol and the image should be 200x200 
 
 <h2 id="deleting-a-comment">Deleting a Comment</h2>
 
-<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/&lt;ID&gt;/</code></p>
+<p><code class="prettyprint">DELETE https://api.upwave.io/workspaces/1337/comments/446119/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Deletes Comment with id 10</span>
-curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/comments/446119/"</span>
   -X DELETE
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+  -H <span class="s2">"Authorization: Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
-<p>If you just direct your eyes slightly to the right, you will see how to delete a Comment</p>
-
           <h1 id="attachments">Attachments</h1>
 
-<p>Attachments may accompany a Comment and holds a resource link to either an uploaded file, a web resource or a Google Drive file.</p>
+<p>Attachments may accompany a Comment. An attachment can be either an uploaded file, a web page resource or a cloud hosted file.</p>
+
+<table><thead>
+<tr>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>uploadedfile</td>
+<td>Indicates that the file was uploaded</td>
+</tr>
+<tr>
+<td>link</td>
+<td>Indicates that the attachment is a web page or web resource</td>
+</tr>
+<tr>
+<td>gdrive</td>
+<td>Indicates that the file is a Google Drive file</td>
+</tr>
+<tr>
+<td>dropbox</td>
+<td>Indicates that the file is a Dropbox file</td>
+</tr>
+<tr>
+<td>onedrive</td>
+<td>Indicates that the file is a Microsoft OneDrive file</td>
+</tr>
+</tbody></table>
 
 <h2 id="list-attachments">List Attachments</h2>
 
-<p><code class="prettyprint">GET https://&lt;TEAM DOMAIN&gt;.upwave.io/api/attachments/</code></p>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/attachments/"</span>
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/attachments/?card=611785</code></p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.upwave.io/workspaces/1337/attachments/?card=611785"</span>
+  -H <span class="s2">"Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
     </span><span class="s2">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="s2">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
       </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sketch.png"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uploadedfile"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some.image.url,
-        "</span><span class="err">preview_url</span><span class="s2">": "</span><span class="err">some.image.url</span><span class="s2">",
-        "</span><span class="err">cover_url</span><span class="s2">": "</span><span class="err">some.image.url</span><span class="s2">",
-        "</span><span class="err">file_size</span><span class="s2">": 5733,
-      },
-      {
-        "</span><span class="err">id</span><span class="s2">": 2,
-        "</span><span class="err">comment</span><span class="s2">": 6,
-        "</span><span class="err">card</span><span class="s2">": 5,
-        "</span><span class="err">name</span><span class="s2">": "</span><span class="err">Spreadsheet</span><span class="w"> </span><span class="err">X</span><span class="s2">",
-        "</span><span class="err">source</span><span class="s2">": "</span><span class="err">gdrive</span><span class="s2">",
-        "</span><span class="err">url</span><span class="s2">": "</span><span class="err">https</span><span class="p">:</span><span class="err">//drive.google.com/.............</span><span class="s2">",
-        "</span><span class="err">preview_url</span><span class="s2">": null,
-        "</span><span class="err">cover_url</span><span class="s2">": null,
-        "</span><span class="err">file_size</span><span class="s2">": 0,
-      },
-      {
-        "</span><span class="err">id</span><span class="s2">": 3,
-        "</span><span class="err">comment</span><span class="s2">": 7,
-        "</span><span class="err">card</span><span class="s2">": 6,
-        "</span><span class="err">name</span><span class="s2">": "</span><span class="err">mysite</span><span class="s2">",
-        "</span><span class="err">source</span><span class="s2">": "</span><span class="err">link</span><span class="s2">",
-        "</span><span class="err">url</span><span class="s2">": "</span><span class="err">https</span><span class="p">:</span><span class="err">//mysite.com</span><span class="s2">",
-        "</span><span class="err">preview_url</span><span class="s2">": null,
-        "</span><span class="err">cover_url</span><span class="s2">": null,
-        "</span><span class="err">file_size</span><span class="s2">": 0,
-      }
-    ]
-  }
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">265422</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"comment"</span><span class="p">:</span><span class="w"> </span><span class="mi">446119</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"card"</span><span class="p">:</span><span class="w"> </span><span class="mi">611785</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"link"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"preview_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"cover_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"file_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Filtering options:</p>
 
@@ -1326,23 +1493,28 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</
 </tr>
 </thead><tbody>
 <tr>
-<td>comment</td>
+<td>source</td>
+<td><code class="prettyprint">string</code></td>
+<td>Filter Attachments on source (see table above)</td>
+</tr>
+<tr>
+<td>*comment</td>
 <td><code class="prettyprint">integer</code></td>
 <td>Filter Attachments on their parent Comment</td>
 </tr>
 <tr>
-<td>card</td>
+<td>*card</td>
 <td><code class="prettyprint">integer</code></td>
 <td>Filter Attachment based on their parent Card</td>
 </tr>
 <tr>
-<td>source</td>
-<td><code class="prettyprint">string</code></td>
-<td>Filter Attachments on source (see below)</td>
+<td>*board</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Filter Attachment based on their parent Board</td>
 </tr>
 </tbody></table>
 
-<p><code class="prettyprint">&quot;source&quot; may be either of &quot;uploadedfile&quot;, &quot;link&quot; or &quot;gdrive&quot;</code></p>
+<p><code class="prettyprint">* You must provide either a comment, card or board to filter on</code></p>
 
 <p>File sizes will only be listed for files that are either uploaded directly (source is &ldquo;uploadedfile&rdquo;) or for Google Drive files that has a file size.</p>
 
@@ -1350,13 +1522,13 @@ curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/comments/10/"</
 
 <h2 id="deleting-an-attachment">Deleting an Attachment</h2>
 
-<p><code class="prettyprint">DELETE https://&lt;TEAM DOMAIN&gt;.upwave.io/api/attachments/&lt;ID&gt;/</code></p>
-<pre class="highlight shell tab-shell"><code><span class="c"># Deletes attachment with id 3</span>
-curl <span class="s2">"https://&lt;TEAM DOMAIN&gt;.upwave.io/api/attachments/3/"</span>
+<p><code class="prettyprint">DELETE https://api.upwave.io/workspaces/1337/attachments/265422/</code></p>
+<pre class="highlight shell tab-shell"><code><span class="c"># Deletes attachment with id 265422</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/attachments/3/"</span>
   -X DELETE
-  -H <span class="s2">"Authorization: &lt;API TOKEN&gt;"</span>
+  -H <span class="s2">"Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
-<p>Although you will have to create Attachments using the Comment API, deletion of attachments can be done using the Attachment API.
+<p>Although you will have to create Attachments using the Comment API, deletion of attachments is done using the Attachment API.
 When deleting an Attachment, the comment will be set as edited by you.</p>
 
           <h1 id="errors">Errors</h1>
@@ -1371,7 +1543,7 @@ When deleting an Attachment, the comment will be set as edited by you.</p>
 </thead><tbody>
 <tr>
 <td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
+<td>Unauthorized &ndash; Your API key is wrong or you are restricted due to social linking</td>
 </tr>
 <tr>
 <td>404</td>
