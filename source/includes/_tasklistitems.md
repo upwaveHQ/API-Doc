@@ -1,44 +1,44 @@
 # TaskListItems
 
-TaskListItems is UpWaves way of handling sub-tasks.
+TaskListItems is Upwaves way of handling sub-tasks.
 
 ## List TaskListItems
 
-`GET https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/`
+`GET https://api.upwave.io/workspaces/1337/tasklistitems/?card=417445`
 
 ```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/"
-  -H "Authorization: <API TOKEN>"
+# List TaskListItems on card 417445
+curl "https://api.upwave.io/workspaces/1337/tasklistitems/?card=417445"
+  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-  {
+{
     "count": 2,
     "next": null,
     "previous": null,
     "results": [
-      {
-        "id": 11,
-        "description": "Write API documentation for TaskListItem",
-        "finished_dt": null,
-        "sort_index": 0,
-        "card": 1
-      },
-      {
-        "id": 12,
-        "description": "Write tests for TaskListItem API",
-        "finished_dt": "2017-05-18T11:53:41.402858Z",
-        "sort_index": 1,
-        "card": 2
-      }
+        {
+            "id": 3654331,
+            "description": "Book demo meeting",
+            "finished_dt": null,
+            "sort_index": 0,
+            "card": 417445
+        },
+        {
+            "id": 3654332,
+            "description": "Make purchasing order",
+            "finished_dt": "2019-05-18T11:53:41.402858Z",
+            "sort_index": 1,
+            "card": 417445
+        }
     ]
-  }
+}
 ```
 
-This endpoint retrieves all the TaskListItems you can access in a paginated fashion.
-They are ordered by sort_index which really only makes sense when filtering using the Card parameter.
+This endpoint retrieves all the TaskListItems belonging to the selected card or board object.
 
 A TaskListItem is essentially a subtask and consist of a description, a field determining if its finished or not, and a sort index.
 
@@ -46,58 +46,64 @@ A TaskListItem is essentially a subtask and consist of a description, a field de
 
 Parameter | Format | Description
 --------- | ------- | ---- | -----------
-finished | `true/false` | Filter TaskListItems on whether they are completed or not
-card | `integer` | Filter TaskListItems based on their parent Card
+finished | `boolean` | Filter TaskListItems on whether they are completed or not
+*card | `integer` | Filter TaskListItems based on their parent Card
+*board | `integer` | Filter TaskListItems based on their parent Board
+
+`* You must provide either a card or board to filter on`
+
 
 ## Creating a new TaskListItem
 
-`POST https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/`
+`POST https://api.upwave.io/workspaces/1337/tasklistitems/`
 
 ```shell
-# Creates a new TaskListItem on Card 2
-curl https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/
-  -H 'Authorization: Token <API_TOKEN>'
+# Creates a new TaskListItem on Card 417445
+curl https://api.upwave.io/workspaces/1337/tasklistitems/
+  -H 'Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
   -H "Content-Type: application/json"
   -X POST
-  -d '{"description": "Write tests for Cmment API", "card": 2}'
+  -d '{"description": "Send item to assembler", "card": 417445}'
 ```
 
 The new TaskListItem will be sorted last automatically (use update to change it).
 
-Argument | Description
--------- | -----------
-description* | The description of the TaskListItem
-card* | The parent Card
+Field | Format | Description
+--------- | ------- | ---- | -----------
+description* | `string` | The description of the TaskListItem
+card* | `integer` | Id of the parent Card
 
 `* required field`
 
+
 ## Updating a TaskListItem
 
-`PATCH https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/<ID>/`
+`PATCH https://api.upwave.io/workspaces/1337/tasklistitems/553113/`
 
 ```shell
-# Updates TaskListItem 13
-curl https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/13/
-  -H 'Authorization: Token <API_TOKEN>'
+# Updates TaskListItem 553113
+curl https://api.upwave.io/workspaces/1337/tasklistitems/553113/
+  -H 'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
   -H "Content-Type: application/json"
-  -X POST
-  -d '{"description": "Write tests for Comment API", "finished_dt": "2017-05-10T09:38:06.459119", "sort_before": "12"}'
+  -X PATCH
+  -d '{"description": "finished": true}'
 ```
 
-Allowed field | Type | Description
+> The above command will update the TaskListItem 553113, marking it as completed
+
+Field | Type | Description
 -------- | ----------- | --------------
-description | `string` | plain-text
+description | `string` | Plain-text description
 finished | `boolean` | toggle the completed state of a TaskListItem
 sort_before | `integer` | sorts this TaskListItem before given TaskListItem id. (0 will sort last)
 
+
 ## Deleting a TaskListItem
-`DELETE https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/<ID>/`
+`DELETE https://api.upwave.io/workspaces/1337/tasklistitems/553113/`
 
 ```shell
-# Deletes TaskListItem with id 12
-curl "https://<TEAM DOMAIN>.upwave.io/api/tasklistitems/12/"
+# Deletes TaskListItem with id 553113
+curl "https://api.upwave.io/workspaces/1337/tasklistitems/553113/"
   -X DELETE
-  -H "Authorization: <API TOKEN>"
+  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
-
-Look there ------>

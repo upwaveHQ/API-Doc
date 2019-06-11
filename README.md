@@ -10,10 +10,10 @@
 
 <p align="center"><em>The example above was created with Slate. Check it out at <a href="https://lord.github.io/slate">lord.github.io/slate</a>.</em></p>
 
-UpWave
+Upwave
 ------------
 This repo was forked from https://github.com/lord/slate
 
-There is nothing secret about this repo - just our documentation for the UpWave API.
+There is nothing secret about this repo - just our documentation for the Upwave API.
 
-To read the docs, visit https://www.upwave.io/api
+To read the compiled docs, visit https://upwavehq.github.io/api/

@@ -1,70 +1,139 @@
 # Cards
 
-UpWave Cards are information carriers that can hold task-description, comments, files etc.
+Upwave Cards are information carriers that can hold a description, comments, files and more.
 
-### Watching a Card
 
-A User, when on a watch list to a Card, will be notified on important changes on that Card.
-The user will automatically be added to the watch list when..
-a) the user is assigned a Card,
-b) the user is mentioned in a Comment on a Card
-c) the user choose to watch the Card
+## View a Card
 
-The only way to unwatch is to update the card with *{"watch": false}*
-This is also the mechanism for how to manually add oneselves to the watch list.
+`GET https://api.upwave.io/workspace/1337/cards/611785/`
+
+This endpoint retrieves a specific Card.
+
+```shell
+# View card with id 611785
+curl "https://api.upwave.io/workspace/1337/cards/611785/"
+  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+```
+
+The `cardlocation` block will differ depending on what kind of Board we are dealing with (plugin_type `classic` vs. plugin_type `canvas`).
+For "classic" boards, the cardlocation will hold column/row information. For "canvas" boards, the cardlocation will hold container information and offset values.
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "id": 611785,
+    "title": "Designing the engine",
+    "description": "<h1>Designing the engine</h1><p>Since the engine will run on Thorium, we need to ...</p>",
+    "cover_image_url": "https://path/to/image",
+    "state": 1,
+    "created_by_user": 263345,
+    "created_dt": "2019-03-18T14:13:44.921Z",
+    "finished_by_user": 263345,
+    "finished_dt": "2019-05-04T08:53:24.921Z",
+    "due_dt": "2019-05-05T12:00:00.921Z",
+    "archived_dt": null,
+    "watched": true,
+    "num_comments": 2,
+    "num_attachments": 1,
+    "board": {
+        "id": 65323,
+        "title": "Rocket driven hoverboard"
+    }
+    "progress": {
+        "completed": 0,
+        "total": 0
+    },
+    "color": {
+        "id": 52778,
+        "name": "High risk",
+        "hex_color": "#f080a2"
+    },
+    "assigned": [
+        {
+            "id": 263345,
+            "email": "coyote@example.com",
+            "fullname": "Wile E.",
+            "firstname": "Coyote",
+            "avatar": "https://path/to/image",
+        }
+    ],
+    "cardlocation": {
+        "column": {
+            "id": 52433,
+            "name": "Completed"
+        },
+        "row": {
+            "id": 23534,
+            "name": "Row-1"
+        }
+    }
+}
+```
+
 
 ## List Cards
 
-`GET https://<TEAM DOMAIN>.upwave.io/api/cards/`
+`GET https://api.upwave.io/workspaces/1337/cards/`
 
 ```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/cards/"
-  -H "Authorization: <API TOKEN>"
+curl "https://api.upwave.io/workspaces/1337/cards/"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-  {
-    "count": 7, 
-    "next": "https://<TEAM DOMAIN>.upwave.io/api/cards/?page=2",
-    "previous": None, 
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
     "results": [
-      {
-        "id": 4723,
-        "title": "A Card",
-        "description": "<h1>A Card</h1><p>More text in a paragraph.</p>",
-        "color": null,
-        "created_dt": "2016-07-13T10:33:26.645Z",
-        "created_by_user": {
-          "id": 2,
-          "email": "person2@example.com",
-          "fullname": "Lisa Doe",
-          "firstname": "Lisa",
-          "avatar": "https://my.profile.image"
-        },
-        "finished_dt": "2016-08-04T08:53:24.921Z",
-        "due_dt": null,
-        "assigned": [
-          {
-            "id": 1,
-            "email": "person1@example.com",
-            "fullname": "John Doe",
-            "firstname": "John",
-            "avatar": "https://my.profile.image"
-          },
-          {
-            "id": 2,
-            "email": "person2@example.com",
-            "fullname": "Lisa Doe",
-            "firstname": "Lisa",
-            "avatar": "https://my.profile.image"
-          },
-        ]
-      },
-      ..
+        {
+            "id": 611785,
+            "title": "Designing the engine",
+            "description": "<h1>Designing the engine</h1><p>Since the engine will run on Thorium, we need to ...</p>",
+            "cover_image_url": "https://path/to/image",
+            "state": 3,
+            "created_by_user": 263345,
+            "created_dt": "2019-03-18T14:13:44.921Z",
+            "finished_by_user": 263345,
+            "finished_dt": "2019-05-04T08:53:24.921Z",
+            "due_dt": "2019-05-05T12:00:00.921Z",
+            "archived_dt": null,
+            "watched": true,
+            "num_comments": 2,
+            "num_attachments": 1,
+            "board": {
+                "id": 65323,
+                "title": "Rocket driven hoverboard"
+            }
+            "progress": {
+                "completed": 0,
+                "total": 0
+            },
+            "color": {
+                "id": 52778,
+                "name": "High risk",
+                "hex_color": "#f080a2"
+            },
+            "access":{
+                "can_edit": true,
+                "can_delete": true,
+                "can_create": true
+            }
+            "assigned": [
+                {
+                    "id": 263345,
+                    "email": "coyote@example.com",
+                    "fullname": "Wile E.",
+                    "firstname": "Coyote",
+                    "avatar": "https://path/to/image",
+                }
+            ]
+        }
     ]
-  }
+}
 ```
 
 This endpoint retrieves all the Cards you can access in a paginated fashion.
@@ -85,7 +154,7 @@ finished | `true/false` | Filter Cards on whether they are completed or not
 state | `integer` | Filter Cards based on their column state
 board | `integer` | Filter Cards based on their parent Board
 assigned | `1,2,3` | Filter Cards based on who are assigned
-q | `querystring` | Search for querystring in Card title and description
+q | `string` | Search for string in Card title and description
 ordering | `field` | Order result-set by field (default "-created")
 page_size | `integer` | Size of result-set per page
 
@@ -96,57 +165,5 @@ For example, to filter Cards that are assigned to either of user-account 1 or 2 
 The ordering parameter will order the result-set on the field given. Acceptable fields are:
 "created", "finished", "due". To specify a descending ordering direction set a minus in front e.g. `?ordering=-created`
 
-When filters are combined they will be AND'ed together. For example to list all Cards that were 
-completed in month July 2017, combine filters like so: `?finished_start=2017-07-1&finished_end=2017-07-31`
-
-## Get a Specific Card
-
-`GET https://<TEAM DOMAIN>.upwave.io/api/cards/<ID>/`
-
-This endpoint retrieves a specific Card.
-
-```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/cards/4723/"
-  -H "Authorization: <API TOKEN>"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-  {
-    "id": 4723,
-    "title": "A Card",
-    "description": "<h1>A Card</h1><p>More text in a paragraph.</p>",
-    "color": null,
-    "created_dt": "2016-07-13T10:33:26.645Z",
-    "created_by_user": {
-      "id": 2,
-      "email": "person2@example.com",
-      "fullname": "Lisa Doe",
-      "firstname": "Lisa",
-      "avatar": "https://my.profile.image"
-    },
-    "finished_dt": "2016-08-04T08:53:24.921Z",
-    "due_dt": null,
-    "assigned": [
-      {
-        "id": 1,
-        "email": "person1@example.com",
-        "fullname": "John Doe",
-        "firstname": "John",
-        "avatar": "https://my.profile.image"
-      },
-      {
-        "id": 2,
-        "email": "person2@example.com",
-        "fullname": "Lisa Doe",
-        "firstname": "Lisa",
-        "avatar": "https://my.profile.image"
-      },
-    ],
-    "watched": true
-  }
-```
-
-In order to fetch additional data belonging to a Card, such as Comments, Attachments, TaskListItems,
-use the appropriate API with a card-filter. Example: *api/comments/?card=\<CARD ID\>*
+When filters are combined they will be AND'ed together. For example to list all Cards that were
+completed in month May 2019, combine filters like so: `?finished_start=2019-05-1&finished_end=2019-05-31`
