@@ -1,3 +1,4 @@
+ruby '>=2.3.1'
 source 'https://rubygems.org'
 
 # Middleman
@@ -7,5 +8,6 @@ gem 'middleman-autoprefixer', '~> 2.7.0'
 gem "middleman-sprockets", "~> 4.1.0"
 gem 'rouge', '~> 2.0.5'
 gem 'redcarpet', '~> 3.4.0'
-gem 'execjs'
+gem 'nokogiri', '~> 1.8.2'
+# gem 'execjs'
 gem 'therubyracer', :platforms => :ruby

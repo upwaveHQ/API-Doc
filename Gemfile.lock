@@ -33,6 +33,7 @@ GEM
     hashie (3.5.1)
     i18n (0.7.0)
     kramdown (1.13.2)
+    libv8 (3.16.14.19)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -54,7 +55,7 @@ GEM
       activesupport (>= 4.2, < 5.1)
       addressable (~> 2.3)
       backports (~> 3.6)
-      bundler (~> 1.1)
+      bundler (~> 2.0)
       contracts (~> 0.13.0)
       dotenv
       erubis
@@ -79,7 +80,10 @@ GEM
     middleman-syntax (3.0.0)
       middleman-core (>= 3.2)
       rouge (~> 2.0)
+    mini_portile2 (2.3.0)
     minitest (5.10.1)
+    nokogiri (1.8.5)
+      mini_portile2 (~> 2.3.0)
     padrino-helpers (0.13.3.3)
       i18n (~> 0.6, >= 0.6.7)
       padrino-support (= 0.13.3.3)
@@ -93,12 +97,16 @@ GEM
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
     redcarpet (3.4.0)
+    ref (2.0.0)
     rouge (2.0.7)
     sass (3.4.23)
     servolux (0.12.0)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
+    therubyracer (0.12.3)
+      libv8 (~> 3.16.14.15)
+      ref
     thor (0.19.4)
     thread_safe (0.3.5)
     tilt (2.0.6)
@@ -115,8 +123,13 @@ DEPENDENCIES
   middleman-autoprefixer (~> 2.7.0)
   middleman-sprockets (~> 4.1.0)
   middleman-syntax (~> 3.0.0)
+  nokogiri (~> 1.8.2)
   redcarpet (~> 3.4.0)
   rouge (~> 2.0.5)
+  therubyracer
+
+RUBY VERSION
+   ruby 2.4.3p205
 
 BUNDLED WITH
-   1.14.3
+   2.0.1
