@@ -3,24 +3,81 @@
 Comments are posted onto Cards by users.
 A Comment holds a text message and optionally a list of [Attachments](#attachments).
 
+
 ### Mentioning
 
 The content of a Comment may include mentions. If a user is mentioned in a Comment,
-that user will receive a notification and will also be added to a [watch list](#cards) for the Card.
+that user will receive a notification and will also be added to the [watch list](#cards) for the Card.
 
 Mention type | Format | Description
 --------- | ------- | ---- | -----------
-User | @{\<USER ID\>} | Mentions the user with id \<USER ID\>
+User | @{263346} | Mentions the user with id 263346
 Group | @{board} | Will notify all members on the parent Board
 
-<aside class="notice">To mention a user, enclose the user's ID in curly brackets with a @ in front - like this: "Hi @{657233}, do you need any help on this Task?"</aside>
+<aside class="notice">Example comment text: "Hi @{263346}, do you need any help on this task?"</aside>
 
-## List Comments
-`GET https://<TEAM DOMAIN>.upwave.io/api/comments/`
+
+## View a Comment
+
+`GET https://api.upwave.io/workspaces/1337/comments/687137/`
 
 ```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
-  -H "Authorization: <API TOKEN>"
+# View comment with id 687137
+curl "https://api.upwave.io/workspaces/1337/comments/687137/"
+  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "id": 687137,
+    "card": 611785,
+    "text": "Hi @{263346}, do you need any help on this task?",
+    "last_edited_dt": null,
+    "last_edited_by_user": null,
+    "created_dt": "2019-05-18T11:37:55.938664Z",
+    "created_by_user": {
+        "id": 263345,
+        "email": "coyote@example.com",
+        "fullname": "Wile E.",
+        "firstname": "Coyote",
+        "avatar": "https://path/to/image",
+    },
+    "attachments": [
+        {
+            "id": 2529,
+            "comment": 687137,
+            "card": 611785,
+            "name": "Thorim Engine Specs",
+            "source": "link",
+            "url": "https://path/to/resource",
+            "preview_url": null,
+            "cover_url": null,
+            "file_size": 0,
+        }
+    ],
+    "mentions": [
+        {
+            "id": 263346,
+            "email": "rascal@example.com",
+            "fullname": "Rascal",
+            "firstname": "Coyote",
+            "avatar": "https://path/to/image"
+        }
+    ]
+}
+```
+
+
+## List Comments
+
+`GET https://api.upwave.io/workspaces/1337/comments/?card=611785`
+
+```shell
+# List Comments on card with id 611785
+curl "https://api.upwave.io/workspaces/1337/comments/?card=611785"
+  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
@@ -31,49 +88,50 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
     "next": null,
     "previous": null,
     "results": [
-      {
-        "id": 10,
-        "card": 6,
-        "created_dt": "2017-05-18T11:37:55.938664Z",
-        "created_by_user": {
-          "id": 1,
-          "email": "person@example.com",
-          "fullname": "John Doe",
-          "firstname": "John",
-          "avatar": "https://my.profile.image"
-        },
-        "last_edited_dt": null,
-        "last_edited_by_user": null,
-        "text": "Hi @{2}, did you see my previous comment?",
-        "attachments": [
-          {
-            "id": 3,
-            "comment": 7,
-            "card": 6,
-            "name": "My site",
-            "source": "link",
-            "url": "https://example.com",
-            "preview_url": null,
-            "cover_url": null,
-            "file_size": 0,
-          }
-        ],
-        "mentions": [
-          {
-          "id": 2,
-          "email": "person2@example.com",
-          "fullname": "Lisa Doe",
-          "firstname": "Lisa",
-          "avatar": "https://my.profile.image"
+        {
+            "id": 687137,
+            "card": 611785,
+            "text": "Hi @{263346}, do you need any help on this task?",
+            "last_edited_dt": null,
+            "last_edited_by_user": null,
+            "created_dt": "2019-05-18T11:37:55.938664Z",
+            "created_by_user": {
+                "id": 263345,
+                "email": "coyote@example.com",
+                "fullname": "Wile E.",
+                "firstname": "Coyote",
+                "avatar": "https://path/to/image",
+            },
+            "attachments": [
+                {
+                    "id": 2529,
+                    "comment": 687137,
+                    "card": 611785,
+                    "name": "Thorim Engine Specs",
+                    "source": "link",
+                    "url": "https://path/to/resource",
+                    "preview_url": null,
+                    "cover_url": null,
+                    "file_size": 0,
+                }
+            ],
+            "mentions": [
+                {
+                    "id": 263346,
+                    "email": "rascal@example.com",
+                    "fullname": "Rascal",
+                    "firstname": "Coyote",
+                    "avatar": "https://path/to/image"
+                }
+            ]
         }
-        ]
-      }
-    ]...
+    ]
 }
 ```
 
 Lists Comments you can access in a paginated fashion.
 They are ordered by creation date (created_dt) with the newest Comment listed first.
+
 
 ### Filters
 
@@ -81,95 +139,55 @@ Parameter | Format | Description
 --------- | ------- | ---- | -----------
 created_by_user | `integer` | Filter Comments on what user created them
 card | `integer` | Filter Comments based on their parent Card
-q | `querystring` | Search for querystring in Comment text
+q | `string` | Search for string in Comment text
 
-When filters are combined they will be AND'ed together. For example to list all Comments created by user 74 **and** which contains the word "Thanks",
-simply combine the filters like so: `?created_by_user=74&q=Thanks`
+When filters are combined they will be AND'ed together.
+For example to list all Comments created by user 263345 **and** which contains the word "specs",
+simply combine the filters like so: `?created_by_user=263345&q=specs`
 
-## Get a specific Comment
-`GET https://<TEAM DOMAIN>.upwave.io/api/comments/<ID>/`
-
-Identical to a Comment in the list-format above.
-
-```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/comments/1/"
-  -H "Authorization: <API TOKEN>"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-  {
-    "id": 10,
-    "card": 6,
-    "created_dt": "2017-05-18T11:37:55.938664Z",
-    "created_by_user": {
-      "id": 1,
-      "email": "person@example.com",
-      "fullname": "John Doe",
-      "firstname": "John",
-      "avatar": "https://my.profile.image",
-    },
-    "last_edited_dt": null,
-    "last_edited_by_user": null,
-    "text": "The number is 42!",
-    "attachments": [
-      {
-        "id": 3,
-        "comment": 7,
-        "card": 6,
-        "name": "mysite",
-        "source": "link",
-        "url": "https://mysite.com",
-        "preview_url": null,
-        "cover_url": null,
-        "file_size": 0,
-      }
-    ]
-  }
-```
 
 ## Updating a Comment
-`POST https://<TEAM DOMAIN>.upwave.io/api/comments/<ID>/`
+
+`PATCH https://api.upwave.io/workspaces/1337/comments/687137/`
 
 ```shell
-curl "https://<TEAM DOMAIN>.upwave.io/api/comments/10/"
-  -H "Authorization: <API TOKEN>"
-  -X POST
-  -d '{
-        "text": "43!, my mistake"
-      }
+# Update Comment with id 687137
+curl "https://api.upwave.io/workspaces/1337/comments/687137/"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -X PATCH
+  -d '{"text": "..."}'
 ```
 
 You are allowed to edit the text in a Comment. Doing so will also update the "last_edited_dt" and "last_edited_by_user".
 
-Argument | Description
--------- | -----------
-text | The content of the Comment in plain text format
+Field | format | Description
+--------- | ------- | ---- | -----------
+text | `string` | The content of the Comment in plain text format
 
 <aside class="notice">Deleting an attachment in a comment can only be done through the Attachment API</aside>
 
 
 ## Creating a new Comment
-`POST https://<TEAM DOMAIN>.upwave.io/api/comments/`
 
-Create new Comments by passing in a text and which Card it should be posted to.
+`POST https://api.upwave.io/workspaces/1337/comments/`
+
+Create new Comments by passing in a text and which Card it should be attached to.
 A Comment may also carry Attachments.
 
 ```shell
-# Creates a new Comment on Card 2
-curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
-  -H "Authorization: <API TOKEN>"
+# Creates a new Comment on Card with id 611785
+curl "https://api.upwave.io/workspaces/1337/comments/"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
   -H "Content-Type: application/json"
   -X POST
   -d '{
         "text": "Well done!",
-        "card": 2
+        "card": 611785
       }'
 
-# Creates a new Comment with both text and Attachment on Card 2
-curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
-  -H "Authorization: <API TOKEN>"
+# Creates a new Comment with both text and Attachment on Card with id 611785
+curl "https://api.upwave.io/workspaces/1337/comments/"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
   -H "Content-Type: application/json"
   -X POST
   -d '{
@@ -180,7 +198,7 @@ curl "https://<TEAM DOMAIN>.upwave.io/api/comments/"
             "name": "Example"
           }
         ]
-        "card": 2
+        "card": 611785
       }'
 ```
 
@@ -197,12 +215,11 @@ attachments | A list of Attachments
 `* required field`
 
 ## Deleting a Comment
-`DELETE https://<TEAM DOMAIN>.upwave.io/api/comments/<ID>/`
+`DELETE https://api.upwave.io/workspaces/1337/comments/446119/`
 
 ```shell
 # Deletes Comment with id 10
-curl "https://<TEAM DOMAIN>.upwave.io/api/comments/10/"
+curl "https://api.upwave.io/workspaces/1337/comments/446119/"
   -X DELETE
-  -H "Authorization: <API TOKEN>"
+  -H "Authorization: Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
-If you just direct your eyes slightly to the right, you will see how to delete a Comment
