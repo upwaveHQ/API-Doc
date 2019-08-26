@@ -1,10 +1,10 @@
 ## Creating a new Card
 
-`POST https://api.upwave.io/workspace/1337/cards/`
+`POST https://api.upwave.io/workspaces/1337/cards/`
 
 ```shell
 # Creates a new Card on Board 65323
-curl https://api.upwave.io/workspace/1337/cards/
+curl https://api.upwave.io/workspaces/1337/cards/
   -H 'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
   -H "Content-Type: application/json"
   -X POST
@@ -28,11 +28,11 @@ row | `integer` | Will position the card in this Row (defaults to first Row)
 
 
 ## Deleting a Card
-`DELETE https://api.upwave.io/workspace/1337/cards/611798/`
+`DELETE https://api.upwave.io/workspaces/1337/cards/611798/`
 
 ```shell
 # Deletes Card with id 611798
-curl "https://api.upwave.io/workspace/1337/cards/611798/"
+curl "https://api.upwave.io/workspaces/1337/cards/611798/"
   -X DELETE
   -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```

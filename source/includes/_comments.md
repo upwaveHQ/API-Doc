@@ -139,6 +139,7 @@ Parameter | Format | Description
 --------- | ------- | ---- | -----------
 created_by_user | `integer` | Filter Comments on what user created them
 card | `integer` | Filter Comments based on their parent Card
+board | `integer` | Filter Comments based on their parent Board
 q | `string` | Search for string in Comment text
 
 When filters are combined they will be AND'ed together.

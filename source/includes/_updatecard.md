@@ -1,10 +1,10 @@
 ## Updating a Card
 
-`PATCH https://api.upwave.io/workspace/1337/cards/611785/`
+`PATCH https://api.upwave.io/workspaces/1337/cards/611785/`
 
 ```shell
 # Updates Card 611785
-curl https://api.upwave.io/workspace/1337/cards/611785/
+curl https://api.upwave.io/workspaces/1337/cards/611785/
   -H 'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
   -H "Content-Type: application/json"
   -X PATCH

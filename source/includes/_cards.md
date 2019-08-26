@@ -5,13 +5,13 @@ Upwave Cards are information carriers that can hold a description, comments, fil
 
 ## View a Card
 
-`GET https://api.upwave.io/workspace/1337/cards/611785/`
+`GET https://api.upwave.io/workspaces/1337/cards/611785/`
 
 This endpoint retrieves a specific Card.
 
 ```shell
 # View card with id 611785
-curl "https://api.upwave.io/workspace/1337/cards/611785/"
+curl "https://api.upwave.io/workspaces/1337/cards/611785/"
   -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
