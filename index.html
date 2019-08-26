@@ -656,11 +656,11 @@ They are ordered by creation date (created_dt) with the newest Board listed firs
 
 <h2 id="view-a-card">View a Card</h2>
 
-<p><code class="prettyprint">GET https://api.upwave.io/workspace/1337/cards/611785/</code></p>
+<p><code class="prettyprint">GET https://api.upwave.io/workspaces/1337/cards/611785/</code></p>
 
 <p>This endpoint retrieves a specific Card.</p>
 <pre class="highlight shell tab-shell"><code><span class="c"># View card with id 611785</span>
-curl <span class="s2">"https://api.upwave.io/workspace/1337/cards/611785/"</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/cards/611785/"</span>
   -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
 <p>The <code class="prettyprint">cardlocation</code> block will differ depending on what kind of Board we are dealing with (plugin_type <code class="prettyprint">classic</code> vs. plugin_type <code class="prettyprint">canvas</code>).
@@ -874,9 +874,9 @@ completed in month May 2019, combine filters like so: <code class="prettyprint">
 
           <h2 id="updating-a-card">Updating a Card</h2>
 
-<p><code class="prettyprint">PATCH https://api.upwave.io/workspace/1337/cards/611785/</code></p>
+<p><code class="prettyprint">PATCH https://api.upwave.io/workspaces/1337/cards/611785/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Updates Card 611785</span>
-curl https://api.upwave.io/workspace/1337/cards/611785/
+curl https://api.upwave.io/workspaces/1337/cards/611785/
   -H <span class="s1">'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -X PATCH
@@ -956,9 +956,9 @@ This is also the mechanism for how to manually add oneselves to the watch list.<
 
           <h2 id="creating-a-new-card">Creating a new Card</h2>
 
-<p><code class="prettyprint">POST https://api.upwave.io/workspace/1337/cards/</code></p>
+<p><code class="prettyprint">POST https://api.upwave.io/workspaces/1337/cards/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Creates a new Card on Board 65323</span>
-curl https://api.upwave.io/workspace/1337/cards/
+curl https://api.upwave.io/workspaces/1337/cards/
   -H <span class="s1">'Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -X POST
@@ -1010,9 +1010,9 @@ If no column with state 1 is found, it will be inserted in the first column.</p>
 
 <h2 id="deleting-a-card">Deleting a Card</h2>
 
-<p><code class="prettyprint">DELETE https://api.upwave.io/workspace/1337/cards/611798/</code></p>
+<p><code class="prettyprint">DELETE https://api.upwave.io/workspaces/1337/cards/611798/</code></p>
 <pre class="highlight shell tab-shell"><code><span class="c"># Deletes Card with id 611798</span>
-curl <span class="s2">"https://api.upwave.io/workspace/1337/cards/611798/"</span>
+curl <span class="s2">"https://api.upwave.io/workspaces/1337/cards/611798/"</span>
   -X DELETE
   -H <span class="s2">"Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"</span>
 </code></pre>
@@ -1318,6 +1318,11 @@ They are ordered by creation date (created_dt) with the newest Comment listed fi
 <td>card</td>
 <td><code class="prettyprint">integer</code></td>
 <td>Filter Comments based on their parent Card</td>
+</tr>
+<tr>
+<td>board</td>
+<td><code class="prettyprint">integer</code></td>
+<td>Filter Comments based on their parent Board</td>
 </tr>
 <tr>
 <td>q</td>
