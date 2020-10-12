@@ -15,13 +15,13 @@ curl https://api.upwave.io/workspaces/1337/cards/611785/
 
 Field | Format | Description
 -------- | ----------- | --------------
-description | `string` | plain-text or HTML allowed
-due_dt | `YYYY-MM-DD` | updates the cards due-dt. Pass *null* to remove due-dt
-color | `color-id` | updates the color for this Card. Pass *null* to remove color
-archive | `boolean` | if true the Card will be moved to the archive
-finished | `boolean` | toggle the completed state of a Card
-assigned | `id-list` | will assign this Card to those user accounts
-sort_before | `integer` | sorts this Card before given Card id (0 will sort last)
+description | `string` | Plain-text or HTML allowed
+due_dt | `YYYY-MM-DD` | Updates the cards due_dt. Pass *null* to remove due_dt
+color | `color-id` | Updates the color for this Card. Pass *null* to remove color
+archive | `boolean` | If true the Card will be moved to the archive
+finished | `boolean` | Toggle the completed state of a Card
+assigned | `id-list` | Will assign this Card to those user accounts
+sort_before | `integer` | Sorts this Card before given Card id (0 will sort last)
 watch | `boolean` | Watch/Unwatch youself for commment notifications on this Card
 
 To update a Card you patch in a JSON object with the fields you'd like to update.

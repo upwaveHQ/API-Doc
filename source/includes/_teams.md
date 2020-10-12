@@ -9,7 +9,7 @@ A Team in Upwave is a container for Boards.
 
 ```shell
 curl "https://api.upwave.io/workspaces/1337/teams/482/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
@@ -19,11 +19,12 @@ curl "https://api.upwave.io/workspaces/1337/teams/482/"
     "id": 482,
     "title": "R & D",
     "hex_color": "#00796b",
-    "hex_text_color": "#ffffff"
-    "access": {
-        "can_edit": true,
-        "can_create": true,
-        "can_delete": true
+    "hex_text_color": "#ffffff",
+    "access":{
+        "can_admin": true,
+        "can_modify": true,
+        "can_invite": true,
+        "can_invite_existing": true
     }
 }
 ```
@@ -35,7 +36,7 @@ curl "https://api.upwave.io/workspaces/1337/teams/482/"
 
 ```shell
 curl "https://api.upwave.io/workspaces/1337/teams/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
@@ -49,10 +50,11 @@ curl "https://api.upwave.io/workspaces/1337/teams/"
         {
             "id": 482,
             "title": "R & D",
-            "access": {
-                "can_edit": true,
-                "can_create": true,
-                "can_delete": true
+            "access":{
+                "can_admin": true,
+                "can_modify": true,
+                "can_invite": true,
+                "can_invite_existing": true
             }
         }
     ]

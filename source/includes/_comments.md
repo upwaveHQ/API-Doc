@@ -24,7 +24,7 @@ Group | @{board} | Will notify all members on the parent Board
 ```shell
 # View comment with id 687137
 curl "https://api.upwave.io/workspaces/1337/comments/687137/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
@@ -77,7 +77,7 @@ curl "https://api.upwave.io/workspaces/1337/comments/687137/"
 ```shell
 # List Comments on card with id 611785
 curl "https://api.upwave.io/workspaces/1337/comments/?card=611785"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
@@ -222,5 +222,5 @@ attachments | A list of Attachments
 # Deletes Comment with id 10
 curl "https://api.upwave.io/workspaces/1337/comments/446119/"
   -X DELETE
-  -H "Authorization: Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```

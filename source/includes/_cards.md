@@ -12,7 +12,7 @@ This endpoint retrieves a specific Card.
 ```shell
 # View card with id 611785
 curl "https://api.upwave.io/workspaces/1337/cards/611785/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 The `cardlocation` block will differ depending on what kind of Board we are dealing with (plugin_type `classic` vs. plugin_type `canvas`).
@@ -118,9 +118,10 @@ curl "https://api.upwave.io/workspaces/1337/cards/"
                 "hex_color": "#f080a2"
             },
             "access":{
-                "can_edit": true,
-                "can_delete": true,
-                "can_create": true
+                "can_admin": true,
+                "can_modify": true,
+                "can_invite": true,
+                "can_invite_existing": true
             }
             "assigned": [
                 {
@@ -150,7 +151,7 @@ due_start | `YYYY-MM-DD` | Filter Cards that have due_dt on or after this date
 due_end | `YYYY-MM-DD` | Filter Cards that have due_dt on or before this date
 finished_start | `YYYY-MM-DD` | Filter Cards that were completed on or after this date
 finished_end | `YYYY-MM-DD` | Filter Cards that were completed on or before this date
-finished | `true/false` | Filter Cards on whether they are completed or not
+finished | `boolean` | Filter Cards on whether they are completed or not
 state | `integer` | Filter Cards based on their column state
 board | `integer` | Filter Cards based on their parent Board
 assigned | `1,2,3` | Filter Cards based on who are assigned

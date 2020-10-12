@@ -1,15 +1,6 @@
 # Members
-
-A Workspace has Workspace-members, a Team has Team-members, a Board has Board-members.
-
-A membership is inherited upwards in the hierarchy. A membership *role* is inherited downwards in the hierarchy.
-
-Examples:
-
-- Adding a membership on a Board (invite), will automatically add membership on the parent Team and Workspace.
-- Updating a Workspace member from role "member" to role "admin" will give that user admin privileges on the Workspace and all Teams and Boards within the Workspace.
-- Updating a Team member from role "member" to role "admin" will give that user admin privileges on the Team and all Boards within the Team.
-
+Workspace, Team and Board objects, the hierarchical access levels, can have members. A membership describes a users relation to an object using the *role* property.
+The *role* property in turn, gives a set of permissions to a user on an object.
 
 ## List Members
 
@@ -18,7 +9,7 @@ Examples:
 
 ```shell
 curl "https://api.upwave.io/workspaces/1337/members/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:

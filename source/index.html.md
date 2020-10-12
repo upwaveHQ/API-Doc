@@ -79,12 +79,12 @@ The token can be obtained by visiting your account settings. Click your profile 
 
 ## Restrictions
 
-If a Workspace is linked to a social account (e.g. Google G Suite, Microsoft 365), your API requests may be rejected if you have not proven that you have successfully authenticated using that social provider.
+If a Workspace is linked to a social account (e.g. Google Workspace, Microsoft 365), your API requests may be rejected if you have not proven that you have successfully authenticated using that social provider.
 
 
 # Pagination
 
-GET requests that return multiple items always comes paginated. The default pagination size is set to 50 whereas the max pagination size is 100.
+GET requests that return multiple items always comes paginated. The max pagination size is 100.
 Follow the "next" and "previous" URLs to turn the pages. The actual list of items are kept within the **results** block.
 
 For most of the requests, a `page_size` parameter can be issued to control the size.
@@ -98,32 +98,42 @@ All API requests are throttled. This means you will receive a status code of 429
 We have two quotas to control this; one per hour (for bursts) and one per day.
 
 
-# Access levels
+# Access and permissions
+Most entities in this API comes with an *access* property that describes the permissions you have on the specific object.
+The permissions are determined by what *role* you have in your membership.
 
-In the examples throughout this docs, you will notice the **access** block.
-This block shows what access you have on the object in question.
+The *access* property can have up to 5 permissions:
 
-It consist of 3 parts:
-
-- can_edit
-- can_create
-- can_delete
+- can_admin
+- can_modify
+- can_comment
+- can_invite
+- can_invite_existing
 
 <aside class="notice">There is no need for a <i>can_view</i>-access. All data returned is always personalized.</aside>
 
 
-## Access can_edit
+## Permission can_admin
 
-The *can_edit* attribute determines if you have the privileges of editing the object.
-For example if the object is a Board entity, you will be able to edit its title and settings.
-
-
-## Access can_create
-
-The *can_create* attribute determines if you have the privileges to create sub objects on the object.
-For example if the object is a Board entity you will be able to create Cards or Board structure objects like Colors, Columns or Rows.
+The *can_admin* permission determines if you have the privileges of editing/administrating the object.
 
 
-## Access can_delete
+## Permission can_modify
 
-The *can_delete* attribute determines if you have the privileges to delete the object.
+The *can_modify* permission tells if you have the privileges to create sub objects on the object.
+For example if the object is a Board entity you will be able to create Cards or change the Board structure objects like Colors, Columns or Rows.
+
+
+## Permission can_comment
+
+The *can_comment* permission is only present at certain objects where commenting is available and tells whether or not the user is allowed to create comments.
+
+
+## Permission can_invite
+
+The *can_invite* permission decides if the user is allowed to invite new users to the object. New users will become member of the object and any parent object.
+
+
+## Permission can_invite_existing
+
+The *can_invite_existing* permission tells if the user is allowed to invite existing Workspace members to the object.

@@ -10,7 +10,7 @@ The structure-types includes; columns, rows, colors and boxes
 
 ```shell
 curl "https://api.upwave.io/workspaces/1337/boards/65323/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
@@ -81,7 +81,7 @@ curl "https://api.upwave.io/workspaces/1337/boards/65323/"
 
 ```shell
 curl "https://api.upwave.io/workspaces/1337/boards/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:

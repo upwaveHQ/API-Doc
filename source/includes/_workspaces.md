@@ -10,7 +10,7 @@ All data that is not directly tied to a users personal account is stored here.
 
 ```shell
 curl "https://api.upwave.io/workspaces/1337/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
@@ -20,10 +20,15 @@ curl "https://api.upwave.io/workspaces/1337/"
     "id": 1,
     "title": "Acme Corporation",
     "logo": "https://path/to/image",
-    "access": {
-        "can_edit": true,
-        "can_create": true,
-        "can_delete": true
+    "access":{
+        "can_admin": true,
+        "can_modify": true,
+        "can_invite": true,
+        "can_invite_existing": true
+    },
+    "logo": "https://path/to/image",
+    "features": {
+        ...
     }
 }
 ```
@@ -35,7 +40,7 @@ curl "https://api.upwave.io/workspaces/1337/"
 
 ```shell
 curl "https://api.upwave.io/workspaces/"
-  -H "Authorization: 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
 > The above command returns JSON structured like this:
@@ -49,10 +54,15 @@ curl "https://api.upwave.io/workspaces/"
         {
             "id": 1337,
             "title": "Acme Corporation",
-            "access": {
-                "can_edit": true,
-                "can_create": true,
-                "can_delete": true
+            "access":{
+                "can_admin": true,
+                "can_modify": true,
+                "can_invite": true,
+                "can_invite_existing": true
+            },
+            "logo": "https://path/to/image",
+            "features": {
+                ...
             }
         }
     ]
