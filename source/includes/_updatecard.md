@@ -32,12 +32,16 @@ For date fields, use UTC.
 
 ### Watching a Card
 
-A User, when on a watch list to a Card, will be notified on important changes on that Card.
-A User will automatically be added to the watch list when..
+When watching a Card a User will be subscribed to notifications for that Card.
+There are multiple ways to subscribe:
 
-1. the user is assigned a Card,
-2. the user is mentioned in a Comment on a Card
-3. the user choose to watch the Card
+1. click the "Watch card" function in the UI
+2. update the Card via API with *{"watch": true}*
+1. create a Card and you are automatically subscribed
+2. create a Comment and you are automatically subscribed
+3. edit a Comment and you are automatically subscribed
+4. mentioning someone in a Comment will subscribe them
+5. assigning someone to a Card will subscribe them
+6. assigning someone to a TaskListItem will subscribe them
 
-The only way to unwatch a Card is to update the Card with *{"watch": false}*
-This is also the mechanism for how to manually add oneselves to the watch list.
+The only way to unwatch a Card is to update the Card with *{"watch": false}* or use the UI function"Unwatch card".
